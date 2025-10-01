@@ -22,37 +22,21 @@ jobs:
       - name: Build Docker image
         run: docker build -t streaum:ci .
 
-      - name: Run container (random host port)
-        run: docker run -d -P --name streaum streaum:ci
-
-      - name: Get mapped port
-        id: port
-        shell: bash
-        run: |
-          MAP=$(docker port streaum 8080/tcp || true)
-          echo "docker port output: $MAP"
-          if [ -z "$MAP" ]; then
-            echo "Failed to discover mapped port"
-            docker logs streaum || true
-            exit 1
-          fi
-          PORT=$(echo "$MAP" | sed -E 's/.*:([0-9]+)/\1/')
-          echo "PORT=$PORT" >> "$GITHUB_OUTPUT"
+      - name: Run container on fixed port 8080
+        run: docker run -d -p 8080:8080 --name streaum streaum:ci
 
       - name: Wait for app to be ready
         env:
-          PORT: ${{ steps.port.outputs.PORT }}
+          PORT: 8080
         shell: bash
         run: |
           echo "Waiting for http://127.0.0.1:${PORT}/ ..."
           for i in {1..60}; do
-            # Fail only on 4xx/5xx; 2xx/3xx are OK
             if curl -fsS "http://127.0.0.1:${PORT}/" -o /dev/null; then
               echo "App is responding."
               exit 0
             fi
 
-            # If the container died, bail out and show logs
             if ! docker ps --filter "name=streaum" --filter "status=running" --format '{{.Names}}' | grep -q '^streaum$'; then
               echo "Container exited unexpectedly. Logs:"
               docker logs streaum || true
@@ -68,12 +52,11 @@ jobs:
 
       - name: Smoke test root endpoint
         env:
-          PORT: ${{ steps.port.outputs.PORT }}
+          PORT: 8080
         shell: bash
         run: |
           STATUS=$(curl -sS -o /dev/null -w '%{http_code}' "http://127.0.0.1:${PORT}/")
           echo "HTTP status: $STATUS"
-          # Accept 2xx and 3xx as success
           if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 400 ]; then
             echo "Unexpected HTTP status from root endpoint."
             docker logs streaum || true
