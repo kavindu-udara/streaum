@@ -1,0 +1,8 @@
+.git
+.idea
+.mvn/wrapper
+target
+*.iml
+*.log
+node_modules
+**/.DS_Store
