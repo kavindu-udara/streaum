@@ -5,15 +5,9 @@ import com.example.streaum.hibernate.HibernateUtil;
 import com.example.streaum.lib.PasswordHandler;
 import com.example.streaum.lib.RegexChecker;
 import com.example.streaum.lib.ResponseHandler;
+import com.example.streaum.services.UserService;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.EntityManagerFactory;
-import jakarta.persistence.Persistence;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Root;
-import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletResponse;
@@ -55,13 +49,9 @@ public class RegisterServlet extends HttpServlet {
 
                 Session session = HibernateUtil.getSessionFactory().openSession();
 
-                CriteriaBuilder cb = session.getCriteriaBuilder();
-                CriteriaQuery<User> cq = cb.createQuery(User.class);
-                Root<User> root = cq.from(User.class);
+                UserService userService = new UserService(session);
 
-                cq.select(root).where(cb.equal(root.get("email"), email));
-
-                if (!session.createQuery(cq).getResultList().isEmpty()) {
+                if (userService.findUserByEmail(email) != null) {
                     resObj.addProperty("message", "Email is already registered.");
                     session.close();
                     return;
@@ -70,15 +60,10 @@ public class RegisterServlet extends HttpServlet {
                 String hashedPwd = PasswordHandler.hashPassword(password);
 
                 User newUser = new User(firstName, lastName, email, hashedPwd);
-                EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-persistence-unit");
 
-                // For each request
-                EntityManager em = emf.createEntityManager();
-
-                em.getTransaction().begin();
-                em.persist(newUser);
-                em.getTransaction().commit();
-                em.close();
+                session.beginTransaction();
+                session.persist(newUser);
+                session.getTransaction().commit();
 
                 isSuccess = true;
                 resStatus = HttpServletResponse.SC_OK;
