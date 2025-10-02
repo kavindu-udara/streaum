@@ -70,15 +70,13 @@ public class RegisterServlet extends HttpServlet {
                 String hashedPwd = PasswordHandler.hashPassword(password);
 
                 User newUser = new User(firstName, lastName, email, hashedPwd);
-
-                // Create EntityManagerFactory once (usually in a Singleton / Startup)
                 EntityManagerFactory emf = Persistence.createEntityManagerFactory("my-persistence-unit");
 
                 // For each request
                 EntityManager em = emf.createEntityManager();
 
                 em.getTransaction().begin();
-                em.persist(newUser);  // instead of session.save()
+                em.persist(newUser);
                 em.getTransaction().commit();
                 em.close();
 
