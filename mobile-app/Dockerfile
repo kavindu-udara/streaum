@@ -8,7 +8,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Install Android SDK Command Line Tools
-ENV ANDROID_SDK_ROOT /opt/android-sdk
+ENV ANDROID_SDK_ROOT=/opt/android-sdk
 RUN mkdir -p $ANDROID_SDK_ROOT/cmdline-tools && \
     wget -q https://dl.google.com/android/repository/commandlinetools-linux-10406996_latest.zip -O /tmp/cmdline-tools.zip && \
     unzip /tmp/cmdline-tools.zip -d $ANDROID_SDK_ROOT/cmdline-tools && \
@@ -16,7 +16,7 @@ RUN mkdir -p $ANDROID_SDK_ROOT/cmdline-tools && \
     rm /tmp/cmdline-tools.zip
 
 # Set environment variables for Android SDK
-ENV PATH $PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator
+ENV PATH=$PATH:$ANDROID_SDK_ROOT/cmdline-tools/latest/bin:$ANDROID_SDK_ROOT/platform-tools:$ANDROID_SDK_ROOT/emulator
 
 # Accept Android SDK licenses and install build tools
 RUN yes | sdkmanager --licenses && \
@@ -43,11 +43,8 @@ RUN npm install -g expo-cli
 # avoids runtime prompts like "Continue?" and the subsequent
 # "cd: android: No such file or directory" error in the workflow.
 # Use --no-install to skip installing deps again (we already ran npm install).
-RUN npx expo prebuild --platform android --non-interactive --no-install --yes || true
+RUN npx expo prebuild --platform android --no-install 
 
 # Health check: build for Android and iOS, display issues
 # (You can override this in your workflow if needed)
-CMD echo "Checking Android build..." && \
-    expo run:android --no-install || echo "Android build failed" && \
-    echo "Checking iOS build..." && \
-    expo run:ios --no-install || echo "iOS build failed"
+CMD ["bash","-lc","echo \"Checking Android build...\" && expo run:android --no-install || echo \"Android build failed\" && echo \"Checking iOS build...\" && expo run:ios --no-install || echo \"iOS build failed\""]
