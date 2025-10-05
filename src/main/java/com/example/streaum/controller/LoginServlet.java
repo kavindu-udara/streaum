@@ -42,7 +42,7 @@ public class LoginServlet  extends HttpServlet {
                 resObj.addProperty("message", "Password must contain at least one digit, one lowercase letter, one uppercase letter and one special character.");
             } else{
 
-//                check user with this email is exist
+//                check user with this email exists
                 UserService userService = new UserService(session);
 
                 User foundUser = userService.findUserByEmail(email);

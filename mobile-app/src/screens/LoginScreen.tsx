@@ -1,12 +1,5 @@
-import {
-  View,
-  Text,
-  StyleSheet,
-  ColorSchemeName,
-  Appearance,
-  ActivityIndicator,
-} from "react-native";
-import React, { isValidElement, useState } from "react";
+import { View, Text, ActivityIndicator } from "react-native";
+import React, { useState } from "react";
 import H1Text from "../components/text/H1Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -18,6 +11,7 @@ import PrimaryLayout from "../components/layouts/PrimaryLayout";
 import PasswordInput from "../components/views/PasswordInput";
 import PrimaryPressable from "../components/buttons/PrimaryPressable";
 import ErrorMessage from "../components/messages/ErrorMessage";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { validateEmail, validatePassword } from "../../lib/validators";
 import api from "../../axios";
 
@@ -33,7 +27,7 @@ const LoginScreen = () => {
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // validating
 
     if (!email || !password) {
@@ -58,12 +52,21 @@ const LoginScreen = () => {
         password,
       })
       .then((res) => {
-        console.log(res);
+        console.log(res.data);
         setIsLoading(false);
+        if (res.data.success) {
+          // store the token in async storage and navigate to home screen
+          AsyncStorage.setItem("token", res.data.token).then(() => {
+            navigation.navigate("Home");
+          });
+          return;
+        }
+        setError(res.data.message);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
         setIsLoading(false);
+        setError(err.response.data.message || "An error occurred during login");
       });
   };
 

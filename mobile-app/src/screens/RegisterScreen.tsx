@@ -16,12 +16,11 @@ import { RootStackParamList } from "../../types/navigation";
 import PasswordInput from "../components/views/PasswordInput";
 import PrimaryLayout from "../components/layouts/PrimaryLayout";
 import formStyles from "../components/styles/formStyles";
-// const OtterLogo = require("../assets/Otter.jpeg");
+import { validateEmail, validatePassword } from "../../lib/validators";
 
 type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
 
 const RegisterScreen = () => {
-  const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
 
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -43,15 +42,14 @@ const RegisterScreen = () => {
     }
 
     // Email validation
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!validateEmail(email)) {
       setError("Please enter a valid email address");
       return;
     }
 
     // Password strength validation
-    if (password.length < 6) {
-      setError("Password must be at least 6 characters long");
+    if (!validatePassword(password)) {
+      setError("Password is too weak. It should be at least 8 characters long and include uppercase letters, lowercase letters, numbers, and special characters.");
       return;
     }
 
@@ -66,46 +64,9 @@ const RegisterScreen = () => {
   const fetchData = async () => {
     setIsLoading(true);
 
-    const data = {
-      firstName,
-      lastName,
-      email,
-      password,
-    };
+    // TODO : Create API Req Process
 
-    try {
-      const response = await fetch(`${EXPO_PUBLIC_API_URL}/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      console.log("Status:", response.status, response.statusText);
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log("Success:", responseData);
-
-        if (!responseData.success) {
-          setError(responseData.message);
-        } else {
-          setError(null);
-          navigation.navigate("Login");
-        }
-      } else {
-        const errorData = await response.json().catch(() => null);
-        setError(
-          errorData?.message || "Registration failed. Please try again."
-        );
-      }
-    } catch (error: any) {
-      console.error("Request failed: " + error.message);
-      setError("Network error. Please check your connection.");
-    } finally {
-      setIsLoading(false);
-    }
+    
   };
 
   return (

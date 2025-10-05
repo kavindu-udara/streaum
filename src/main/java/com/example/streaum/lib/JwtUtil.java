@@ -4,15 +4,15 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
+import io.github.cdimascio.dotenv.Dotenv;
 
 import java.util.Date;
 import java.util.Map;
 
 public class JwtUtil {
 
-    private static final String SECRET = System.getenv("JWT_SECRET");
-
-//    TODO : SECRET KEY DOESNT GETTING
+    private static final Dotenv dotenv = Dotenv.load();
+    private static final String SECRET = dotenv.get("JWT_SECRET");
 
     public static String generateToken(Map<String, Object> claims) {
         Algorithm algorithm = Algorithm.HMAC256(SECRET);
