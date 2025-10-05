@@ -1,0 +1,104 @@
+name: Mobile App (Docker) — Build & Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      tag_name:
+        description: 'Tag name to release (e.g., v1.2.3). If empty, a timestamp will be used.'
+        required: false
+        default: ''
+
+permissions:
+  contents: write
+
+concurrency:
+  group: mobile-app-build-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  build-android:
+    name: Build Android and publish release
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image (mobile app builder)
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: ./mobile-app/Dockerfile
+          tags: mobile-app-builder:latest
+          load: true
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build Android artifacts inside container
+        id: build
+        env:
+          JAVA_TOOL_OPTIONS: -Xmx2g
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          docker run --rm \
+            -e ANDROID_SDK_ROOT=/opt/android-sdk \
+            -e JAVA_TOOL_OPTIONS="$JAVA_TOOL_OPTIONS" \
+            -v "$PWD/artifacts":/artifacts \
+            mobile-app-builder:latest \
+            bash -lc '
+              set -euo pipefail
+              # Ensure dependencies (in case Docker layer cache was invalidated)
+              if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+              # Prebuild native Android project if needed (no-op if already present)
+              npx expo prebuild --platform android --non-interactive --no-install || true
+
+              cd android
+              chmod +x gradlew
+
+              # Try release; fall back to debug if signing is not configured
+              ./gradlew --no-daemon assembleRelease || ./gradlew --no-daemon assembleDebug
+
+              # Collect APK/AAB artifacts
+              find app/build/outputs -type f \( -name "*.apk" -o -name "*.aab" \) -print -exec cp {} /artifacts/ \;
+            '
+
+      - name: Verify artifacts exist
+        run: |
+          shopt -s nullglob
+          files=(artifacts/*.apk artifacts/*.aab)
+          if [ ${#files[@]} -eq 0 ]; then
+            echo "No Android artifacts were produced."
+            exit 1
+          fi
+          printf "Artifacts:\n%s\n" "${files[@]}"
+
+      - name: Determine release tag
+        id: tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
+          else
+            tn="${{ github.event.inputs.tag_name }}"
+            if [ -z "$tn" ]; then tn="manual-$(date +%Y%m%d%H%M%S)"; fi
+            echo "tag=$tn" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Create GitHub Release and upload artifacts
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.tag.outputs.tag }}
+          generate_release_notes: true
+          fail_on_unmatched_files: false
+          files: |
+            artifacts/*.apk
+            artifacts/*.aab

@@ -6,7 +6,7 @@ import {
   Appearance,
   ActivityIndicator,
 } from "react-native";
-import React, { useState } from "react";
+import React, { isValidElement, useState } from "react";
 import H1Text from "../components/text/H1Text";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
@@ -15,25 +15,56 @@ import Label from "../components/text/Label";
 import PrimaryInput from "../components/inputs/PrimaryInput";
 import formStyles from "../components/styles/formStyles";
 import PrimaryLayout from "../components/layouts/PrimaryLayout";
-import PasswordInput from "../components/views/passwordInput";
+import PasswordInput from "../components/views/PasswordInput";
 import PrimaryPressable from "../components/buttons/PrimaryPressable";
 import ErrorMessage from "../components/messages/ErrorMessage";
+import { validateEmail, validatePassword } from "../../lib/validators";
+import api from "../../axios";
 
 type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
 
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationPropType>();
-  const colorScheme = Appearance.getColorScheme();
-  const styles = createStyles(colorScheme);
 
   const formStyle = formStyles();
 
   const [error, setError] = useState<string | null>(null);
+  const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = () => {
+    // validating
+
+    if (!email || !password) {
+      setError("All fields are required");
+      return;
+    }
+    if (!validateEmail(email)) {
+      setError("Invalid email");
+      return;
+    }
+    if (!validatePassword(password)) {
+      setError(
+        "Password shoul be at least 8 characters, one uppercase, one lowercase, one number, one special character"
+      );
+      return;
+    }
+
     setIsLoading(true);
+    api
+      .post("/login", {
+        email,
+        password,
+      })
+      .then((res) => {
+        console.log(res);
+        setIsLoading(false);
+      })
+      .catch((err) => {
+        console.log(err);
+        setIsLoading(false);
+      });
   };
 
   return (
@@ -44,13 +75,15 @@ const LoginScreen = () => {
           <Text style={formStyle.subtitle}>Enter Login Details</Text>
         </View>
 
-        {error && <ErrorMessage text={error} />}
+        {error && <ErrorMessage text={error} setText={setError} />}
 
         {/* input group - email */}
         <View style={formStyle.inputGroup}>
           <Label text="Email" />
           <View style={formStyle.inputContainer}>
             <PrimaryInput
+              value={email}
+              onChangeText={setEmail}
               placeholder="Email address"
               keyboardType="email-address"
               autoCapitalize="none"
@@ -93,19 +126,3 @@ const LoginScreen = () => {
 };
 
 export default LoginScreen;
-
-const createStyles = (theme: ColorSchemeName) => {
-  const isDark = theme === "dark";
-
-  return StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: isDark ? "#121212" : "#f8f9fa",
-    },
-    scrollContainer: {
-      flexGrow: 1,
-      justifyContent: "center",
-      padding: 20,
-    },
-  });
-};
