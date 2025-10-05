@@ -1,5 +1,5 @@
 # Use official Node.js image as base
-FROM node:18-bullseye
+FROM node:20-bullseye
 
 # Install dependencies for Android and iOS builds
 RUN apt-get update && \
@@ -25,6 +25,9 @@ RUN yes | sdkmanager --licenses && \
 # Set working directory
 WORKDIR /app/mobile-app
 
+# Prevent CLIs from trying to ask interactive questions in CI
+ENV CI=1
+
 # Copy package.json and install dependencies
 COPY mobile-app/package*.json ./
 RUN npm install
@@ -34,6 +37,13 @@ COPY . .
 
 # Install expo-cli globally
 RUN npm install -g expo-cli
+
+# Run an Expo prebuild at image build time non-interactively so an
+# `android/` directory exists when the container is run later. This
+# avoids runtime prompts like "Continue?" and the subsequent
+# "cd: android: No such file or directory" error in the workflow.
+# Use --no-install to skip installing deps again (we already ran npm install).
+RUN npx expo prebuild --platform android --non-interactive --no-install --yes || true
 
 # Health check: build for Android and iOS, display issues
 # (You can override this in your workflow if needed)
