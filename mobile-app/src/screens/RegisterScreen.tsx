@@ -13,14 +13,12 @@ import PrimaryPressable from "../components/buttons/PrimaryPressable";
 import { useNavigation } from "@react-navigation/native";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
 import { RootStackParamList } from "../../types/navigation";
-import PasswordInput from "../components/views/passwordInput";
+import PasswordInput from "../components/views/PasswordInput";
 import PrimaryLayout from "../components/layouts/PrimaryLayout";
 import formStyles from "../components/styles/formStyles";
 // const OtterLogo = require("../assets/Otter.jpeg");
 
 type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
-
-const { width } = Dimensions.get("window");
 
 const RegisterScreen = () => {
   const EXPO_PUBLIC_API_URL = process.env.EXPO_PUBLIC_API_URL;
@@ -118,7 +116,7 @@ const RegisterScreen = () => {
             <Text style={formStyle.subtitle}>Sign up to get started</Text>
           </View>
 
-          {error && <ErrorMessage text={error} />}
+          {error && <ErrorMessage text={error} setText={setError} />}
 
           <View style={formStyle.nameRow}>
             <View style={[formStyle.inputGroup, { flex: 1, marginRight: 8 }]}>
