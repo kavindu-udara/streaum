@@ -62,7 +62,7 @@ if (fs.existsSync(p)) {\
 } else { console.log("app.json not found, skipping package set"); }'
 
 # RUN npx expo prebuild --platform android --no-install 
-RUN npx expo prebuild --platform android --no-install --yes
+RUN yes | npx expo prebuild --platform android --no-install
 
 # Health check: build for Android and iOS, display issues
 # (You can override this in your workflow if needed)
