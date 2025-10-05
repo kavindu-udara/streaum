@@ -7,7 +7,7 @@ on:
   workflow_dispatch:
     inputs:
       tag_name:
-        description: 'Tag name to release (e.g., v1.2.3). If empty, a timestamp will be used.'
+        description: ''
         required: false
         default: ''
 

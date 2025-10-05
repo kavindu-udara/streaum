@@ -23,7 +23,7 @@ RUN yes | sdkmanager --licenses && \
     sdkmanager "platform-tools" "platforms;android-34" "build-tools;34.0.0"
 
 # Set working directory
-WORKDIR /app
+WORKDIR /app/mobile-app
 
 # Copy package.json and install dependencies
 COPY package*.json ./
