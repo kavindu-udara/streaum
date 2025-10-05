@@ -4,18 +4,20 @@ import React from "react";
 import { RootStackParamList } from "../types/navigation";
 import { NavigationContainer } from "@react-navigation/native";
 import RegisterScreen from "./screens/RegisterScreen";
+import LoginScreen from "./screens/LoginScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="Login" component={LoginScreen} options={{headerShown : false}} />
       </Stack.Navigator>
     </NavigationContainer>
   );

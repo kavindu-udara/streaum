@@ -1,25 +1,12 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Text, View } from "react-native";
+import React from "react";
 
-const ErrorMessage = ({text} : {text : string}) => {
+const ErrorMessage = ({ text }: { text: string }) => {
   return (
-    <View style={styles.view}>
-      <Text style={styles.text}>Error : {text}</Text>
+    <View className="border border-red-500 rounded-xl p-5 my-5 bg-red-200 ">
+      <Text className="font-bold text-red-900">{text}</Text>
     </View>
-  )
-}
+  );
+};
 
-export default ErrorMessage
-
-const styles = StyleSheet.create({
-    view: {
-        width : "100%",
-        backgroundColor : "#cf52527c",
-        alignItems : "center",
-        padding: 5,
-        borderRadius: 10,
-    },
-    text : {
-        color : "red"
-    }
-})
+export default ErrorMessage;
