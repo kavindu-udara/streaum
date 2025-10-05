@@ -20,6 +20,7 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
+      "package": "com.streaum.mobileapp",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
