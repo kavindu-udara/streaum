@@ -26,7 +26,7 @@ RUN yes | sdkmanager --licenses && \
 WORKDIR /app/mobile-app
 
 # Copy package.json and install dependencies
-COPY package*.json ./
+COPY mobile-app/package*.json ./
 RUN npm install
 
 # Copy the rest of the project files
