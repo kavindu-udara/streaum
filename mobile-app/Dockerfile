@@ -43,6 +43,24 @@ RUN npm install -g expo-cli
 # avoids runtime prompts like "Continue?" and the subsequent
 # "cd: android: No such file or directory" error in the workflow.
 # Use --no-install to skip installing deps again (we already ran npm install).
+# Ensure app.json has an android.package to avoid Play Store package conflicts
+# which cause expo to prompt during prebuild (and fail in non-interactive CI).
+RUN node -e '\
+const fs = require("fs");\
+const p = "app.json";\
+if (fs.existsSync(p)) {\
+    const j = JSON.parse(fs.readFileSync(p));\
+    j.expo = j.expo || {};\
+    j.expo.android = j.expo.android || {};\
+    if (!j.expo.android.package) {\
+        j.expo.android.package = "com.streaum.mobileapp";\
+        fs.writeFileSync(p, JSON.stringify(j, null, 2));\
+        console.log("Set android.package to", j.expo.android.package);\
+    } else {\
+        console.log("android.package already set to", j.expo.android.package);\
+    }\
+} else { console.log("app.json not found, skipping package set"); }'
+
 RUN npx expo prebuild --platform android --no-install 
 
 # Health check: build for Android and iOS, display issues
