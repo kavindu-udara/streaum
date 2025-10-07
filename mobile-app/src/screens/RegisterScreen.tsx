@@ -17,6 +17,7 @@ import PasswordInput from "../components/views/PasswordInput";
 import PrimaryLayout from "../components/layouts/PrimaryLayout";
 import formStyles from "../components/styles/formStyles";
 import { validateEmail, validatePassword } from "../../lib/validators";
+import api from "../../axios";
 
 type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
 
@@ -64,8 +65,24 @@ const RegisterScreen = () => {
   const fetchData = async () => {
     setIsLoading(true);
 
-    // TODO : Create API Req Process
-
+    api.post("/register", {
+      firstName,
+      lastName,
+      email,
+      password,
+    }).then((res) => {
+        console.log(res.data);
+      setIsLoading(false);
+      if (res.data.success) {
+        navigation.navigate("Login");
+        return;
+      }
+      setError(res.data.message || "An error occurred. Please try again.");
+    }).catch((err) => {
+      setIsLoading(false);
+      setError("An error occurred. Please try again.");
+      console.error(err);
+    });
     
   };
 
