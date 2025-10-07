@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
 import java.io.IOException;
+import java.util.List;
 
 @WebServlet(name = "ServersServlet", urlPatterns = {"/servers"})
 public class ServersServlet extends HttpServlet {
@@ -20,14 +21,38 @@ public class ServersServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Session session = HibernateUtil.getSessionFactory().openSession();
-        session.beginTransaction();
-        Server server = new Server("First Server");
-        session.persist(server);
-        session.getTransaction().commit();
-        session.close();
+        Gson gson = new Gson();
+        JsonObject resObj = new JsonObject();
 
-        response.getWriter().println("This is a server servlet response : ");
+        boolean isSuccess = false;
+        int resStatus = HttpServletResponse.SC_BAD_REQUEST;
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try {
+
+            List<Server> serverList = session.createQuery("from Server", Server.class).list();
+
+            if (serverList.isEmpty()) {
+                resObj.addProperty("message", "No servers found.");
+                session.close();
+                return;
+            }
+
+            isSuccess = true;
+            resStatus = HttpServletResponse.SC_CREATED;
+
+            resObj.addProperty("message", "Server created successfully.");
+            resObj.add("serverId", gson.toJsonTree(serverList));
+
+        } catch (Exception e) {
+//            throw new RuntimeException(e);
+            resObj.addProperty("message", e.getMessage());
+        } finally {
+            session.close();
+            ResponseHandler.SendResponseJson(response, resStatus, isSuccess, resObj);
+        }
+
     }
 
     @Override
@@ -39,20 +64,19 @@ public class ServersServlet extends HttpServlet {
         boolean isSuccess = false;
         int resStatus = HttpServletResponse.SC_BAD_REQUEST;
 
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
         try {
             String name = reqObj.get("name").getAsString();
 
-            if(name.isEmpty()){
+            if (name.isEmpty()) {
                 resObj.addProperty("message", "Name is required.");
-            }else{
-
-                Session session = HibernateUtil.getSessionFactory().openSession();
+            } else {
 
                 Server server = new Server(name);
                 session.beginTransaction();
                 session.persist(server);
                 session.getTransaction().commit();
-                session.close();
 
                 isSuccess = true;
                 resStatus = HttpServletResponse.SC_CREATED;
@@ -65,7 +89,8 @@ public class ServersServlet extends HttpServlet {
         } catch (Exception e) {
 //            throw new RuntimeException(e);
             resObj.addProperty("message", e.getMessage());
-        }finally {
+        } finally {
+            session.close();
             ResponseHandler.SendResponseJson(response, resStatus, isSuccess, resObj);
         }
 

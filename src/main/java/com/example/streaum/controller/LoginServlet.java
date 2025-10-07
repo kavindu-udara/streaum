@@ -67,6 +67,13 @@ public class LoginServlet  extends HttpServlet {
 
                 String jwt = JwtUtil.generateToken(claims);
 
+//                save token in user
+                foundUser.setToken(jwt);
+
+                session.beginTransaction();
+                session.persist(foundUser);
+                session.getTransaction().commit();
+
                 isSuccess = true;
                 resStatus = HttpServletResponse.SC_OK;
                 resObj.addProperty("message", "Login successful.");
