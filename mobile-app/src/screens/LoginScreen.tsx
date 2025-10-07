@@ -2,8 +2,7 @@ import { View, Text, ActivityIndicator } from "react-native";
 import React, { useState } from "react";
 import H1Text from "../components/text/H1Text";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/navigation";
+import { NavigationPropType } from "../../types/navigation";
 import Label from "../components/text/Label";
 import PrimaryInput from "../components/inputs/PrimaryInput";
 import formStyles from "../components/styles/formStyles";
@@ -14,8 +13,6 @@ import ErrorMessage from "../components/messages/ErrorMessage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { validateEmail, validatePassword } from "../../lib/validators";
 import api from "../../axios";
-
-type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
 
 const LoginScreen = () => {
   const navigation = useNavigation<NavigationPropType>();

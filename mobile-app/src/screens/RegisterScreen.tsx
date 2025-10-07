@@ -2,7 +2,6 @@ import {
   View,
   Text,
   ActivityIndicator,
-  Dimensions,
 } from "react-native";
 import React, { useState } from "react";
 import H1Text from "../components/text/H1Text";
@@ -11,15 +10,12 @@ import Label from "../components/text/Label";
 import PrimaryInput from "../components/inputs/PrimaryInput";
 import PrimaryPressable from "../components/buttons/PrimaryPressable";
 import { useNavigation } from "@react-navigation/native";
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import { RootStackParamList } from "../../types/navigation";
+import { NavigationPropType } from "../../types/navigation";
 import PasswordInput from "../components/views/PasswordInput";
 import PrimaryLayout from "../components/layouts/PrimaryLayout";
 import formStyles from "../components/styles/formStyles";
 import { validateEmail, validatePassword } from "../../lib/validators";
 import api from "../../axios";
-
-type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;
 
 const RegisterScreen = () => {
 

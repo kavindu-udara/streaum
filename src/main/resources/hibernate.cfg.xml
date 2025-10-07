@@ -23,5 +23,6 @@
 
         <!-- Entities -->
         <mapping class="com.example.streaum.entity.User"/>
+        <mapping class="com.example.streaum.entity.Server"/>
     </session-factory>
 </hibernate-configuration>
