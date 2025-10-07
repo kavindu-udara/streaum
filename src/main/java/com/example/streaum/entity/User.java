@@ -1,7 +1,6 @@
 package com.example.streaum.entity;
 
 import jakarta.persistence.*; // changed from javax.persistence
-import java.io.Serializable;
 
 @Entity
 @Table(name = "user")
@@ -23,6 +22,17 @@ public class User extends BaseEntity{
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    @Column(name = "token", unique = true)
+    private String token;
 
     @Enumerated
     @Column(name = "type", length = 10)

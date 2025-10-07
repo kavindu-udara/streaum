@@ -11,7 +11,7 @@ const Layout = () => {
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Register"
           component={RegisterScreen}

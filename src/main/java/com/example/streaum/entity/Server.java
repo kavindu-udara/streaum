@@ -1,10 +1,7 @@
 package com.example.streaum.entity;
 
 import com.example.streaum.lib.UUIDUtil;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 import java.util.UUID;
 
@@ -13,18 +10,16 @@ import java.util.UUID;
 public class Server {
 
     @Id
-    @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.UUID)
+    @Column(name = "id", nullable = false, updatable = false, length = 36)
     private String id;
 
     @Column(name = "name", length = 45, nullable = false)
     private String name;
 
-    public Server() {
-        this.id = UUIDUtil.generateUUID();
-    }
+    public Server() {}
 
     public Server(String name) {
-        this.id = UUIDUtil.generateUUID();
         this.name = name;
     }
 
