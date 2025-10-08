@@ -1,5 +1,6 @@
 package com.example.streaum.controller;
 
+import com.example.streaum.DTO.ServerDTO;
 import com.example.streaum.entity.User;
 import com.example.streaum.entity.UserHasServers;
 import com.example.streaum.hibernate.HibernateUtil;
@@ -34,13 +35,13 @@ public class MyServersServlet extends HttpServlet {
         try {
             String token = (String) request.getAttribute("token");
 
-            if(token == null || token.isEmpty()) {
+            if (token == null || token.isEmpty()) {
                 resObj.addProperty("message", "Token is required.");
                 return;
             }
 
 //            verify token
-            if(JwtUtil.verifyToken(token) == null) {
+            if (JwtUtil.verifyToken(token) == null) {
                 resObj.addProperty("message", "Token is invalid.");
                 return;
             }
@@ -49,7 +50,7 @@ public class MyServersServlet extends HttpServlet {
             UserService userService = new UserService(session);
             User selectedUser = userService.findUserByToken(token);
 
-            if(selectedUser == null) {
+            if (selectedUser == null) {
                 resObj.addProperty("message", "User not found.");
                 return;
             }
@@ -57,9 +58,12 @@ public class MyServersServlet extends HttpServlet {
 //            find servers list with user
             UserHasServersService userHasServersService = new UserHasServersService(session);
 
-            List<UserHasServers> userHasServersList = userHasServersService.findAllUserHasServersByUser(selectedUser);
+            List<UserHasServers> entities = userHasServersService.findAllUserHasServersByUser(selectedUser);
+            List<ServerDTO> servers = entities.stream()
+                    .map(ServerDTO::new)
+                    .toList();
 
-            if(userHasServersList == null || userHasServersList.isEmpty()) {
+            if (entities.isEmpty()) {
                 resStatus = HttpServletResponse.SC_NOT_FOUND;
                 resObj.addProperty("message", "No servers found.");
                 return;
@@ -68,12 +72,12 @@ public class MyServersServlet extends HttpServlet {
             isSuccess = true;
             resStatus = HttpServletResponse.SC_OK;
             resObj.addProperty("message", "Servers found successfully.");
-            resObj.add("server", gson.toJsonTree(userHasServersList));
+            resObj.add("servers", gson.toJsonTree(servers));
 
         } catch (Exception e) {
-//            throw new RuntimeException(e);
+            e.printStackTrace();
             resObj.addProperty("message", e.getMessage());
-        }finally {
+        } finally {
             ResponseHandler.SendResponseJson(response, resStatus, isSuccess, resObj);
             session.close();
         }
