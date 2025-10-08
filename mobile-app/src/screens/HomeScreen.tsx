@@ -16,11 +16,13 @@ const HomeScreen = () => {
   const [servers, setServers] = React.useState<Server[]>([]);
 
   const fetchData = async (token: string) => {
+    setstatus("Loading");
     api
       .post("/my-servers", {
         token,
       })
       .then((res) => {
+        setstatus("Success");
         console.log("server res : ", res.data);
         setServers(res.data.servers);
       })
@@ -59,6 +61,7 @@ const HomeScreen = () => {
 
   return (
     <View>
+
       {status === "Loading" ? (
         <Text>Loading</Text>
       ) : status === "Error" ? (
