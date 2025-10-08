@@ -24,7 +24,7 @@ public class UserHasServers {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    protected UserHasServers() {
+    public UserHasServers() {
         // JPA requires a no-arg constructor
     }
 

@@ -5,13 +5,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
+import CreateServerScreen from "./screens/servers/CreateServerScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
+      <Stack.Navigator initialRouteName="Home">
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
@@ -31,6 +32,17 @@ const Layout = () => {
             headerTitle : "Servers"
           }}
         />
+
+        {/* servers */}
+        <Stack.Screen
+          name="CreateServer"
+          component={CreateServerScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Create Server"
+          }}
+        />
+
       </Stack.Navigator>
     </NavigationContainer>
   );

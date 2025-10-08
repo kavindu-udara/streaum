@@ -6,6 +6,7 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Settings: undefined;
+  CreateServer : undefined;
 };
 
 export type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;

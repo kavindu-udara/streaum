@@ -33,7 +33,7 @@ public class MyServersServlet extends HttpServlet {
 
         try {
             String token = (String) request.getAttribute("token");
-//            String token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJteS1hcHAiLCJpYXQiOjE3NTk4Njg0MjgsImV4cCI6MTc1OTg3MjAyOCwiZW1haWwiOiJ0ZXN0QHRlc3QuY29tIiwidXNlcklkIjoxLCJsYXN0TmFtZSI6ImxuYW1lIiwiZmlyc3ROYW1lIjoiZm5hbWUifQ.dwhUFIEEDJrQePevzPWaIjAG8DwLbpb91o-BPKwcYeU";
+
             if(token == null || token.isEmpty()) {
                 resObj.addProperty("message", "Token is required.");
                 return;
@@ -68,7 +68,7 @@ public class MyServersServlet extends HttpServlet {
             isSuccess = true;
             resStatus = HttpServletResponse.SC_OK;
             resObj.addProperty("message", "Servers found successfully.");
-            resObj.add("serverList", gson.toJsonTree(userHasServersList));
+            resObj.add("server", gson.toJsonTree(userHasServersList));
 
         } catch (Exception e) {
 //            throw new RuntimeException(e);

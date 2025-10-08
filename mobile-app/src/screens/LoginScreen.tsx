@@ -54,7 +54,7 @@ const LoginScreen = () => {
         if (res.data.success) {
           // store the token in async storage and navigate to home screen
           AsyncStorage.setItem("token", res.data.token).then(() => {
-            navigation.navigate("Home");
+            navigation.navigate("CreateServer");
           });
           return;
         }
@@ -70,6 +70,7 @@ const LoginScreen = () => {
   return (
     <PrimaryLayout>
       <View className="mb-20" style={formStyle.formContainer}>
+
         <View style={formStyle.header}>
           <H1Text text="Login" />
           <Text style={formStyle.subtitle}>Enter Login Details</Text>

@@ -11,6 +11,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.hibernate.Session;
 
 import java.io.IOException;
@@ -73,6 +74,9 @@ public class LoginServlet  extends HttpServlet {
                 session.beginTransaction();
                 session.persist(foundUser);
                 session.getTransaction().commit();
+
+                HttpSession ses = request.getSession();
+                ses.setAttribute("user", foundUser);
 
                 isSuccess = true;
                 resStatus = HttpServletResponse.SC_OK;

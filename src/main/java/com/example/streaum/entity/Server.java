@@ -17,10 +17,18 @@ public class Server {
     @Column(name = "name", length = 45, nullable = false)
     private String name;
 
+    @Column(name = "image", nullable = true)
+    private String image;
+
     public Server() {}
 
     public Server(String name) {
         this.name = name;
+    }
+
+    public Server(String name, String image) {
+        this.name = name;
+        this.image = image;
     }
 
     public String getId() {
@@ -36,4 +44,11 @@ public class Server {
         this.name = name;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 }
