@@ -12,12 +12,10 @@ import java.nio.file.StandardCopyOption;
 
 public class FileHandler {
 
-    private static final Dotenv dotenv = Dotenv.load();
-    private static final String UPLOAD_PATH = dotenv.get("UPLOAD_PATH");
+    private static String uploadDir = Constants.getUploadDir();
 
     public static String uploadFile(Part filePart) throws IOException {
 
-        String uploadDir = System.getenv().getOrDefault(UPLOAD_PATH, "/Users/user/Desktop/uploads/streaum/files");
         File uploadDirFile = new File(uploadDir);
         if (!uploadDirFile.exists()) {
             uploadDirFile.mkdirs(); // make sure folder exists
@@ -47,6 +45,13 @@ public class FileHandler {
         System.out.println("Saved file to: " + file.getAbsolutePath());
 
         return randomFileName;
+    }
+
+    public static void deleteFile(String fileName) throws IOException {
+        File file = new File(uploadDir, fileName);
+        if (file.exists()) {
+            Files.delete(file.toPath());
+        }
     }
 
 }

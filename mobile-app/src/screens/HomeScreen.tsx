@@ -33,6 +33,10 @@ const HomeScreen = () => {
           "An error occurred while fetching servers"
         );
 
+        if(!err.response.data.success){
+          navigation.navigate("Login");
+        }
+
         if (err.response && err.response.status === 401) {
           navigation.navigate("Login");
         } else if (err.response && err.response.status === 404) {

@@ -2,5 +2,5 @@
 
 ## Task List
 - [ ] create servers actions
-- [ ] create get router to access files
+- [x] create get router to access files
 

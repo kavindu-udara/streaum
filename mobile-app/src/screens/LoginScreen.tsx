@@ -54,7 +54,7 @@ const LoginScreen = () => {
         if (res.data.success) {
           // store the token in async storage and navigate to home screen
           AsyncStorage.setItem("token", res.data.token).then(() => {
-            navigation.navigate("CreateServer");
+            navigation.navigate("Home");
           });
           return;
         }

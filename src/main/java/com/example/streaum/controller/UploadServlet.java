@@ -47,8 +47,6 @@ public class UploadServlet extends HttpServlet {
                 return;
             }
 
-            String appPath = getServletContext().getRealPath("");
-
             String newFileName = FileHandler.uploadFile(filePart);
 
             isSuccess = true;
