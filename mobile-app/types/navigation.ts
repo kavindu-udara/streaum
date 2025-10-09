@@ -7,6 +7,8 @@ export type RootStackParamList = {
   Profile: undefined;
   Settings: undefined;
   CreateServer : undefined;
+  SingleServer : { serverId: string };
+  CreateChannel : { serverId: string };
 };
 
 export type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;

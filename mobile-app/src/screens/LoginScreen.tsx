@@ -112,6 +112,7 @@ const LoginScreen = () => {
             <Text style={formStyle.submitButtonText}>Login</Text>
           )}
         </PrimaryPressable>
+        
         <View style={formStyle.secondaryTextContainer}>
           <Text style={formStyle.secondaryText}>Don't have an account? </Text>
           <Text

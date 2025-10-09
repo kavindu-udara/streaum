@@ -1,9 +1,6 @@
 package com.example.streaum.entity;
 
-import com.example.streaum.lib.UUIDUtil;
 import jakarta.persistence.*;
-
-import java.util.UUID;
 
 @Entity
 @Table(name = "servers")

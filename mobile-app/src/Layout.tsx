@@ -6,13 +6,15 @@ import RegisterScreen from "./screens/RegisterScreen";
 import LoginScreen from "./screens/LoginScreen";
 import HomeScreen from "./screens/HomeScreen";
 import CreateServerScreen from "./screens/servers/CreateServerScreen";
+import SingleServerScreen from "./screens/servers/SingleServerScreen";
+import CreateChannelScreen from "./screens/channels/CreateChannelScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
 
   return (
     <NavigationContainer>
-      <Stack.Navigator initialRouteName="Home">
+      <Stack.Navigator initialRouteName="Login">
         <Stack.Screen
           name="Register"
           component={RegisterScreen}
@@ -40,6 +42,22 @@ const Layout = () => {
           options={{
             headerShown: true,
             headerTitle : "Create Server"
+          }}
+        />
+        <Stack.Screen
+          name="SingleServer"
+          component={SingleServerScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Single Server"
+          }}
+        />
+        <Stack.Screen
+          name="CreateChannel"
+          component={CreateChannelScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Create Channel"
           }}
         />
 
