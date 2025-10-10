@@ -11,7 +11,7 @@ import jakarta.servlet.http.HttpSession;
 
 import java.io.IOException;
 
-@WebFilter(urlPatterns = {"/upload/*", "/create-server/*", "/files/*", "/channels/*"})
+@WebFilter(urlPatterns = {"/upload/*", "/create-server/*", "/files/*", "/channels/*", "/my-servers/*"})
 public class SessionChecker implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {

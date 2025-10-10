@@ -30,4 +30,24 @@ public class ChannelService {
         return channels.isEmpty() ? null : channels.get(0);
     }
 
+    public List<Channel> findAllChannelsByNameServer(Server server) {
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
+        Root<Channel> root = cq.from(Channel.class);
+        cq.select(root).where(cb.equal(root.get("server"), server));
+        cq.orderBy(cb.asc(root.get("name")));
+        return session.createQuery(cq).getResultList();
+    }
+
+    public List<Channel> findAllChannelsByNameServerAndType(Server server, ChannelType type) {
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
+        Root<Channel> root = cq.from(Channel.class);
+        cq.select(root).where(cb.equal(root.get("server"), server));
+        cq.select(root).where(cb.equal(root.get("type"), type));
+        cq.orderBy(cb.asc(root.get("name")));
+        return session.createQuery(cq).getResultList();
+    }
+
+
 }

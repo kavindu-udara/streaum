@@ -20,6 +20,7 @@ import java.io.IOException;
 
 @WebServlet(name = "ChannelServlet", urlPatterns = {"/channels"})
 public class ChannelServlet extends HttpServlet {
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Gson gson = new Gson();

@@ -1,8 +1,8 @@
 import { View, Text, ActivityIndicator } from 'react-native'
 import React from 'react'
 import PrimaryLayout from '../../components/layouts/PrimaryLayout'
-import { RouteProp, useRoute } from '@react-navigation/native'
-import { RootStackParamList } from '../../../types/navigation'
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
+import { NavigationPropType, RootStackParamList } from '../../../types/navigation'
 import formStyles from '../../components/styles/formStyles'
 import H1Text from '../../components/text/H1Text'
 import Label from '../../components/text/Label'
@@ -19,6 +19,8 @@ const CreateChannelScreen = () => {
 
     const route = useRoute<CreateChannelRouteProp>();
     const { serverId } = route.params;
+
+    const navigation = useNavigation<NavigationPropType>();
 
     const [name, setName] = React.useState<string>("");
     const [isLoading, setIsLoading] = React.useState<boolean>(false);
@@ -37,7 +39,7 @@ const CreateChannelScreen = () => {
             return;
         }
         setIsLoading(true);
-        
+
         api.post("/channels", {
             name,
             type: channelType,
@@ -46,17 +48,16 @@ const CreateChannelScreen = () => {
             console.log(res.data);
             setIsLoading(false);
             if (res.data.success) {
-                // navigate back to single server screen
-                // navigation.goBack();
+                navigation.navigate("SingleServer", { serverId });
                 return;
             }
             setError("An error occurred while creating the channel. Please try again.");
         }).catch((err) => {
             setIsLoading(false);
             setError("An error occurred while creating the channel. Please try again.");
-            if(err.response){
+            if (err.response) {
                 setError(err.response.data.message);
-            }else{
+            } else {
                 setError(err.message || err || "An error occurred while creating the channel. Please try again.");
             }
         });
@@ -107,6 +108,10 @@ const CreateChannelScreen = () => {
                     ) : (
                         <Text style={formStyle.submitButtonText}>Create</Text>
                     )}
+                </PrimaryPressable>
+
+                <PrimaryPressable onPress={() => { navigation.navigate("SingleServer", { serverId }) }} style={[formStyle.submitButton, { backgroundColor: 'gray', marginTop: 10 }]} disabled={isLoading}>
+                    <Text>Cancel</Text>
                 </PrimaryPressable>
 
             </View>
