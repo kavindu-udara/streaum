@@ -9,6 +9,8 @@ export type RootStackParamList = {
   CreateServer : undefined;
   SingleServer : { serverId: string };
   CreateChannel : { serverId: string };
+  TextChannel : { channelId: number };
+  VoiceChannel : { channelId: number };
 };
 
 export type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;

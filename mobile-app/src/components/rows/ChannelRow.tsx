@@ -1,13 +1,38 @@
-import { View, Text } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import React from 'react'
 import { ChannelRes } from '../../../types'
+import AntDesign from '@expo/vector-icons/AntDesign';
+import Fontisto from '@expo/vector-icons/Fontisto';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationPropType } from '../../../types/navigation';
 
-const ChannelRow = ({channel} : {channel : ChannelRes}) => {
-  return (
-    <View>
-      <Text>{channel.name}</Text>
-    </View>
-  )
+const ChannelRow = ({ channel }: { channel: ChannelRes }) => {
+
+    const navigation = useNavigation<NavigationPropType>();
+
+    const handleOnPress = () => {
+        if (channel.type === "TEXT") {
+            navigation.navigate("TextChannel", { channelId: channel.id });
+        } else if (channel.type === "VOICE") {
+            navigation.navigate("VoiceChannel", { channelId: channel.id });
+        }
+    }
+
+    return (
+        <Pressable onPress={handleOnPress}>
+            <View className='mb-3 p-5 flex flex-row gap-5 items-center border border-slate-300 '>
+                {/* icon */}
+                {
+                    channel.type === "TEXT" ? (
+                        <Fontisto name="hashtag" size={24} color="black" />
+                    ) : (
+                        <AntDesign name="sound" size={24} color="black" />
+                    )
+                }
+                <Text className='font-semibold text-lg'>{channel.name}</Text>
+            </View>
+        </Pressable>
+    )
 }
 
 export default ChannelRow

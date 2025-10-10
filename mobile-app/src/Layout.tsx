@@ -8,6 +8,8 @@ import HomeScreen from "./screens/HomeScreen";
 import CreateServerScreen from "./screens/servers/CreateServerScreen";
 import SingleServerScreen from "./screens/servers/SingleServerScreen";
 import CreateChannelScreen from "./screens/channels/CreateChannelScreen";
+import TextChannelScreen from "./screens/channels/TextChannelScreen";
+import VoiceChannelScreen from "./screens/channels/VoiceChannelScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -60,7 +62,24 @@ const Layout = () => {
             headerTitle : "Create Channel"
           }}
         />
-
+        {/* channels */}
+        <Stack.Screen
+          name="TextChannel"
+          component={TextChannelScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Channel Name"
+          }}
+        />
+        {/* channels */}
+        <Stack.Screen
+          name="VoiceChannel"
+          component={VoiceChannelScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Channel Name"
+          }}
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );
