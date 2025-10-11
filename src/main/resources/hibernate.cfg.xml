@@ -27,5 +27,6 @@
         <mapping class="com.example.streaum.entity.UserHasServers"/>
         <mapping class="com.example.streaum.entity.Channel"/>
         <mapping class="com.example.streaum.entity.TextChannelHistory"/>
+        <mapping class="com.example.streaum.entity.ServerInvitation"/>
     </session-factory>
 </hibernate-configuration>

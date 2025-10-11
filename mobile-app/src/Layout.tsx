@@ -10,6 +10,7 @@ import SingleServerScreen from "./screens/servers/SingleServerScreen";
 import CreateChannelScreen from "./screens/channels/CreateChannelScreen";
 import TextChannelScreen from "./screens/channels/TextChannelScreen";
 import VoiceChannelScreen from "./screens/channels/VoiceChannelScreen";
+import CreateServerInvitationScreen from "./screens/servers/CreateServerInvitationScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -54,6 +55,14 @@ const Layout = () => {
             headerTitle : "Server Dashboard"
           }}
         />
+        <Stack.Screen  name="CreateServerInvitation"
+          component={CreateServerInvitationScreen}
+          options={{
+            headerShown: true,
+            headerTitle : "Server Invitation"
+          }} />
+
+        {/* channels */}
         <Stack.Screen
           name="CreateChannel"
           component={CreateChannelScreen}
@@ -62,7 +71,6 @@ const Layout = () => {
             headerTitle : "Create Channel"
           }}
         />
-        {/* channels */}
         <Stack.Screen
           name="TextChannel"
           component={TextChannelScreen}

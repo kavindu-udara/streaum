@@ -7,6 +7,8 @@ export type RootStackParamList = {
   Profile: undefined;
   Settings: undefined;
   CreateServer: undefined;
+  JoinServer : undefined;
+  CreateServerInvitation : { serverId: string };
   SingleServer: { serverId: string };
   CreateChannel: { serverId: string };
   TextChannel: { channelId: number; serverId: string; channelName: string };

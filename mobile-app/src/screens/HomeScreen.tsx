@@ -63,7 +63,7 @@ const HomeScreen = () => {
   return (
     <View>
 
-      <View className="flex flex-row items-center justify-between">
+      <View className="flex flex-row items-center justify-between mt-3">
         <PrimaryPressable
           onPress={() =>
             navigation.navigate("CreateServer")
@@ -77,6 +77,23 @@ const HomeScreen = () => {
         >
           <Text className="text-white font-semibold text-base">
             Create Server
+          </Text>
+        </PrimaryPressable>
+      </View>
+      <View className="flex flex-row items-center justify-between mt-5">
+        <PrimaryPressable
+          onPress={() =>
+            navigation.navigate("CreateServer")
+          }
+          style={{
+            backgroundColor: "#4f46e5",
+            paddingVertical: 10,
+            paddingHorizontal: 16,
+            borderRadius: 10,
+          }}
+        >
+          <Text className="text-white font-semibold text-base">
+            Join a Server
           </Text>
         </PrimaryPressable>
       </View>
