@@ -1,4 +1,4 @@
-import { View, Text, Image } from 'react-native'
+import { View, Text, Image, Pressable } from 'react-native'
 import React, { useEffect } from 'react'
 import { Server } from '../../../types';
 import { useNavigation } from '@react-navigation/native';
@@ -24,21 +24,44 @@ const ServersRow = ({ server }: { server: Server }) => {
     const handlePress = () => {
       console.log("Pressed server: ", server.id);
       navigation.navigate('SingleServer', { serverId: server.id });
-      // Navigate to SingleServer screen with serverId
-      // navigation.navigate('SingleServer', { serverId: server.id });
     }
 
   return (
-    <View onTouchEnd={handlePress} className='py-5 px-5 w-full bg-white flex flex-row items-center gap-5 border-b border-slate-300 hover:bg-gray-100'>
-      <View>
+   <Pressable
+      onPress={handlePress}
+      className="w-full bg-white flex flex-row items-center p-4 mb-3 rounded-xl border border-slate-200 shadow-sm active:opacity-80"
+      android_ripple={{ color: "#e5e7eb" }}
+      style={{
+        elevation: 2, // subtle shadow for Android
+      }}
+    >
+      {/* Server Icon */}
+      <View className="mr-4">
         <Image
           source={imageSource}
-          style={{ width: 50, height: 50 }}
-          className='rounded-lg'
+          style={{
+            width: 56,
+            height: 56,
+            borderRadius: 12,
+          }}
         />
       </View>
-      <Text className='font-bold text-2xl'>{server.name}</Text>
-    </View>
+
+      {/* Server Info */}
+      <View className="flex-1">
+        <Text className="text-lg font-semibold text-gray-900">
+          {server.name}
+        </Text>
+        <Text className="text-gray-500 text-sm mt-1" numberOfLines={1}>
+          Tap to open server
+        </Text>
+      </View>
+
+      {/* Right Arrow Indicator */}
+      <View className="ml-3">
+        <Text className="text-gray-400 text-xl">›</Text>
+      </View>
+    </Pressable>
   )
 }
 

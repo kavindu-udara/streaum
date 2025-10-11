@@ -1,4 +1,4 @@
-import { FlatList, Text, View } from "react-native";
+import { ActivityIndicator, FlatList, Text, View } from "react-native";
 import React, { useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from "@react-navigation/native";
@@ -60,64 +60,74 @@ const HomeScreen = () => {
       });
   }, []);
 
-  return (
-    <View>
+  const renderContent = () => {
+    if (status === "Loading") {
+      return (
+        <View className="flex items-center mt-6">
+          <ActivityIndicator size="large" color="#4f46e5" />
+          <Text className="mt-2 text-gray-600">Loading servers...</Text>
+        </View>
+      );
+    }
 
-      <View className="flex flex-row items-center justify-between mt-3">
+    if (status === "Error") {
+      return (
+        <Text className="text-center text-red-500 mt-6">
+          Error while fetching servers.
+        </Text>
+      );
+    }
+
+    if (status === "Not-Found" || !servers?.length) {
+      return (
+        <Text className="text-center text-gray-500 mt-6">
+          No servers found. Join or create a server.
+        </Text>
+      );
+    }
+    return (
+      <FlatList
+        data={servers}
+        keyExtractor={(item) => item.id.toString()}
+        renderItem={({ item }) => <ServersRow server={item} />}
+        contentContainerStyle={{ paddingBottom: 120 }}
+        className="mt-4"
+      />
+    );
+  };
+
+  return (
+    <View className="flex-1 bg-white px-5 pt-8">
+      
+      {/* Buttons */}
+      <View className="flex flex-col w-full gap-5">
         <PrimaryPressable
-          onPress={() =>
-            navigation.navigate("CreateServer")
-          }
+          onPress={() => navigation.navigate("CreateServer")}
           style={{
             backgroundColor: "#4f46e5",
-            paddingVertical: 10,
-            paddingHorizontal: 16,
             borderRadius: 10,
+            marginRight: 8,
           }}
         >
-          <Text className="text-white font-semibold text-base">
+          <Text className="text-white font-semibold text-base text-center">
             Create Server
           </Text>
         </PrimaryPressable>
-      </View>
-      <View className="flex flex-row items-center justify-between mt-5">
+
         <PrimaryPressable
-          onPress={() =>
-            navigation.navigate("JoinServer")
-          }
+          onPress={() => navigation.navigate("JoinServer")}
           style={{
-            backgroundColor: "#4f46e5",
-            paddingVertical: 10,
-            paddingHorizontal: 16,
+            backgroundColor: "#10b981",
             borderRadius: 10,
           }}
         >
-          <Text className="text-white font-semibold text-base">
-            Join a Server
+          <Text className="text-white font-semibold text-base text-center">
+            Join Server
           </Text>
         </PrimaryPressable>
       </View>
 
-      {status === "Loading" ? (
-        <Text>Loading</Text>
-      ) : status === "Error" ? (
-        <Text>Error while fetching servers</Text>
-      ) : status === "Not-Found" ? (
-        <Text>No servers found. Join or create a server.</Text>
-      ) : (
-        <Text>Servers</Text>
-      )}
-
-      {/* create a flatlist */}
-      {servers && servers.length > 0 && (
-        <FlatList data={servers}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <ServersRow server={item} />
-          )}
-        />
-      )}
-
+      {renderContent()}
     </View>
   );
 };

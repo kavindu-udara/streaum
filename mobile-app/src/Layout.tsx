@@ -35,7 +35,7 @@ const Layout = () => {
           options={{
             headerShown: true,
             headerLeft: () => null,
-            headerTitle: "Servers"
+            headerTitle: "My Servers"
           }}
         />
 
