@@ -83,7 +83,7 @@ const HomeScreen = () => {
       <View className="flex flex-row items-center justify-between mt-5">
         <PrimaryPressable
           onPress={() =>
-            navigation.navigate("CreateServer")
+            navigation.navigate("JoinServer")
           }
           style={{
             backgroundColor: "#4f46e5",

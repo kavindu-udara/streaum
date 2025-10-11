@@ -11,6 +11,7 @@ import CreateChannelScreen from "./screens/channels/CreateChannelScreen";
 import TextChannelScreen from "./screens/channels/TextChannelScreen";
 import VoiceChannelScreen from "./screens/channels/VoiceChannelScreen";
 import CreateServerInvitationScreen from "./screens/servers/CreateServerInvitationScreen";
+import JoinServerScreen from "./screens/servers/JoinServerScreen";
 
 const Layout = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -34,7 +35,7 @@ const Layout = () => {
           options={{
             headerShown: true,
             headerLeft: () => null,
-            headerTitle : "Servers"
+            headerTitle: "Servers"
           }}
         />
 
@@ -44,7 +45,7 @@ const Layout = () => {
           component={CreateServerScreen}
           options={{
             headerShown: true,
-            headerTitle : "Create Server"
+            headerTitle: "Create Server"
           }}
         />
         <Stack.Screen
@@ -52,14 +53,20 @@ const Layout = () => {
           component={SingleServerScreen}
           options={{
             headerShown: true,
-            headerTitle : "Server Dashboard"
+            headerTitle: "Server Dashboard"
           }}
         />
-        <Stack.Screen  name="CreateServerInvitation"
+        <Stack.Screen name="CreateServerInvitation"
           component={CreateServerInvitationScreen}
           options={{
             headerShown: true,
-            headerTitle : "Server Invitation"
+            headerTitle: "Server Invitation"
+          }} />
+        <Stack.Screen name="JoinServer"
+          component={JoinServerScreen}
+          options={{
+            headerShown: true,
+            headerTitle: "Join Server"
           }} />
 
         {/* channels */}
@@ -68,7 +75,7 @@ const Layout = () => {
           component={CreateChannelScreen}
           options={{
             headerShown: true,
-            headerTitle : "Create Channel"
+            headerTitle: "Create Channel"
           }}
         />
         <Stack.Screen
@@ -76,7 +83,7 @@ const Layout = () => {
           component={TextChannelScreen}
           options={{
             headerShown: true,
-            headerTitle : "Channel Name"
+            headerTitle: "Channel Name"
           }}
         />
         {/* channels */}
@@ -85,7 +92,7 @@ const Layout = () => {
           component={VoiceChannelScreen}
           options={{
             headerShown: true,
-            headerTitle : "Channel Name"
+            headerTitle: "Channel Name"
           }}
         />
       </Stack.Navigator>

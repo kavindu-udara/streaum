@@ -28,4 +28,12 @@ public class DateTimeUtil {
         }
     }
 
+    public static boolean isThisDateIsPassedDate(Date date){
+        if(date.before(new Date())){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
 }

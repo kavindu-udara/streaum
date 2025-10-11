@@ -4,6 +4,7 @@ import com.example.streaum.entity.*;
 import com.example.streaum.hibernate.HibernateUtil;
 import com.example.streaum.lib.DateTimeUtil;
 import com.example.streaum.lib.ResponseHandler;
+import com.example.streaum.services.ServerInvitationService;
 import com.example.streaum.services.ServerService;
 import com.example.streaum.services.UserHasServersService;
 import com.google.gson.Gson;
@@ -21,13 +22,79 @@ import java.util.Date;
 import java.util.Set;
 
 @WebServlet(name = "ServerInvitationServllet", urlPatterns = {"/server-invitation"})
-public class ServerInvitationServllet extends HttpServlet {
+public class ServerInvitationServlet extends HttpServlet {
+
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        Gson gson = new Gson();
+        JsonObject reqObj = gson.fromJson(request.getReader(), JsonObject.class);
+        JsonObject resObj = new JsonObject();
+
+        boolean isSuccess = false;
+        int resStatus = HttpServletResponse.SC_BAD_REQUEST;
+
+        Session session = HibernateUtil.getSessionFactory().openSession();
+
+        try{
+
+            HttpSession reqSession = request.getSession(false);
+            User selectedUser = (User) reqSession.getAttribute("user");
+
+            String id = request.getParameter("id");
+
+            if (id.isEmpty()) {
+                resObj.addProperty("message", "id is required.");
+                return;
+            }
+
+//            find invitation by id
+            ServerInvitationService serverInvitationService = new ServerInvitationService(session);
+            ServerInvitation foundServerInvitation = serverInvitationService.findServerInvitationById(id);
+            if(foundServerInvitation == null){
+                resStatus = HttpServletResponse.SC_NOT_FOUND;
+                resObj.addProperty("message", "Invitation not found.");
+                return;
+            }
+
+//            check is invite expired
+            if(DateTimeUtil.isThisDateIsPassedDate(foundServerInvitation.getExpireAt())){
+                resObj.addProperty("message", "Invitation expired.");
+                return;
+            }
+
+//            find user is already a member of the server
+            UserHasServersService userHasServersService = new UserHasServersService(session);
+            UserHasServers foundUserHasServers = userHasServersService.findUserHasServersByUserAndServer(selectedUser, foundServerInvitation.getServer());
+            if(foundUserHasServers != null){
+                resObj.addProperty("message", "User is already a member of this server.");
+            }
+
+//            add user to server
+            UserHasServers newUserHasServers = new UserHasServers(foundServerInvitation.getType(), foundServerInvitation.getServer(), selectedUser);
+            session.beginTransaction();
+            session.persist(newUserHasServers);
+            session.getTransaction().commit();
+            resObj.addProperty("message", "User registered successfully.");
+            resObj.addProperty("invitationId", foundServerInvitation.getId());
+            resObj.addProperty("serverId", foundServerInvitation.getServer().getId());
+
+            isSuccess = true;
+            resStatus = HttpServletResponse.SC_CREATED;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            resObj.addProperty("message", e.getMessage());
+        } finally {
+            session.close();
+            ResponseHandler.SendResponseJson(response, resStatus, isSuccess, resObj);
+        }
+    }
+
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         Gson gson = new Gson();
         JsonObject reqObj = gson.fromJson(request.getReader(), JsonObject.class);
         JsonObject resObj = new JsonObject();
-
 
         boolean isSuccess = false;
         int resStatus = HttpServletResponse.SC_BAD_REQUEST;

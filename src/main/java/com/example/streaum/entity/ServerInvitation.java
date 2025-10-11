@@ -21,6 +21,22 @@ public class ServerInvitation {
     @Column(name="expire_at")
     private Date expireAt;
 
+    public MemberType getType() {
+        return type;
+    }
+
+    public void setType(MemberType type) {
+        this.type = type;
+    }
+
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
     @Enumerated(EnumType.STRING)
     @Column(name = "member_type", length = 10, nullable = false)
     private MemberType type = MemberType.MEMBER;

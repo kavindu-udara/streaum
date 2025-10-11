@@ -90,7 +90,7 @@ const SingleServerScreen = () => {
                 {error && <ErrorMessage text={error} setText={setError} />}
 
                 {/* Text Channels */}
-                <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200">
+                <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200 mt-5">
                     <Text className="text-xl font-bold text-gray-900 mb-3">
                         💬 Text Channels
                     </Text>
@@ -112,7 +112,7 @@ const SingleServerScreen = () => {
                 </View>
 
                 {/* Voice Channels */}
-                <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200">
+                <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200 mt-5">
                     <Text className="text-xl font-bold text-gray-900 mb-3">
                         🔊 Voice Channels
                     </Text>
