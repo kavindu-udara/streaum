@@ -17,3 +17,10 @@ export type ChannelRes = {
 };
 
 export type MemberType = "CREATOR" | "ADMIN" | "MEMBER" | "REMOVED";
+
+export type Message = {
+  id: string;
+  text: string;
+  sender: "me" | "other";
+  name : string
+};

@@ -1,5 +1,6 @@
 package com.example.streaum.websocket;
 
+import com.example.streaum.DTO.TextChannelMessageDTO;
 import com.example.streaum.entity.*;
 import com.example.streaum.hibernate.HibernateUtil;
 import com.example.streaum.lib.JwtUtil;
@@ -7,6 +8,7 @@ import com.example.streaum.services.ChannelService;
 import com.example.streaum.services.ServerService;
 import com.example.streaum.services.UserHasServersService;
 import com.example.streaum.services.UserService;
+import com.google.gson.Gson;
 import jakarta.websocket.OnOpen;
 import jakarta.websocket.OnClose;
 import jakarta.websocket.OnMessage;
@@ -164,6 +166,14 @@ public class ChatSocket {
 
         UserService userService = new UserService(hibernateSession);
         User foundUser = userService.findUserByToken(token);
+        if (foundUser == null) {
+            try {
+                session.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return;
+        }
 
         TextChannelHistory textChannelHistory = new TextChannelHistory(foundChannel, message, foundUser);
         hibernateSession.beginTransaction();
@@ -171,7 +181,10 @@ public class ChatSocket {
         hibernateSession.getTransaction().commit();
         hibernateSession.close();
 
-        String formattedMessage = userId + ": " + message;
+        TextChannelMessageDTO newTextChannelMessageDTO = new TextChannelMessageDTO(userId,message, foundUser.getFirstName() + " " + foundUser.getLastName(), textChannelHistory.getCreatedAt().toString(), token);
+
+        Gson gson = new Gson();
+        String formattedMessage = String.valueOf(gson.toJsonTree(newTextChannelMessageDTO));
         broadcast(key, formattedMessage);
     }
 
