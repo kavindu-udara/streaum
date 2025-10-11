@@ -31,7 +31,7 @@ const formStyles = () => {
       borderWidth: 1,
       borderColor: isDark ? "#333" : "#e2e8f0",
       borderRadius: 12,
-      backgroundColor: isDark ? "#2a2a2a" : "#f8fafc",
+      backgroundColor: isDark ? "#2a2a2a" : "#fff",
       marginTop: 8,
     },
     inputIcon: {
@@ -40,7 +40,7 @@ const formStyles = () => {
     input: {
       flex: 1,
       paddingHorizontal: 16,
-      paddingVertical: 14,
+      paddingVertical: 10,
       color: isDark ? "#fff" : "#000",
     },
     eyeIcon: {

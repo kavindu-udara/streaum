@@ -111,7 +111,7 @@ const CreateServerInvitationScreen = () => {
                 {isResponseSuccess && responseData ? (
                     <TouchableOpacity
                         onPress={handleCopy}
-                        className={`mt-6 py-3 rounded-xl bg-blue-600`}
+                        className={`mt-6 py-3 rounded-xl bg-indigo-600`}
                     >
                         <Text className="text-white text-center font-semibold">
                             Copy
@@ -121,7 +121,7 @@ const CreateServerInvitationScreen = () => {
                     <TouchableOpacity
                         onPress={handleSubmit}
                         disabled={uploading}
-                        className={`mt-6 py-3 rounded-xl ${uploading ? 'bg-gray-400' : 'bg-blue-600'}`}
+                        className={`mt-6 py-3 rounded-xl ${uploading ? 'bg-gray-400' : 'bg-indigo-600'}`}
                     >
                         <Text className="text-white text-center font-semibold">
                             {uploading ? 'Loading...' : 'Invite Friend'}

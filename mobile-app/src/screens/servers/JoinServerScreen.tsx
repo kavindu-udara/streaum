@@ -1,4 +1,4 @@
-import { View, Text, TouchableOpacity } from 'react-native'
+import { View, Text, TouchableOpacity, ActivityIndicator } from 'react-native'
 import React, { useState } from 'react'
 import { RouteProp, useNavigation } from '@react-navigation/native';
 import { NavigationPropType, RootStackParamList } from '../../../types/navigation';
@@ -19,6 +19,9 @@ const JoinServerScreen = () => {
     const formStyle = formStyles();
 
     const handleSubmit = () => {
+        if(!id){
+            setError("Id is required");
+        }
         setUploading(true);
         api.get("/server-invitation", {
             params: {
@@ -39,35 +42,66 @@ const JoinServerScreen = () => {
     }
 
     return (
-        <PrimaryLayout>
+         <PrimaryLayout>
+      <View className="flex-1 px-6 justify-center">
+        {/* Header */}
+        <View className="mb-10 items-center">
+          <Text className="text-3xl font-bold text-gray-900 mb-2">
+            Join a Server
+          </Text>
+          <Text className="text-gray-500 text-base text-center">
+            Enter your invitation ID below to join a server.
+          </Text>
+        </View>
 
-            <View style={formStyle.header}>
-                <Text style={formStyle.subtitle}>Enter Server Details</Text>
-            </View>
+        {/* Error Message */}
+        {error && <ErrorMessage text={error} setText={setError} />}
 
-            {error && <ErrorMessage text={error} setText={setError} />}
+        {/* Input Field */}
+        <View className="mt-6 w-full flex flex-col items-center">
+          <Label text="Invitation ID" />
+          <PrimaryInput
+            style={[
+              formStyle.input,
+              {
+                borderColor: "#d1d5db", // soft gray
+                borderWidth: 1,
+                backgroundColor: "#fff",
+                borderRadius: 10,
+                paddingHorizontal: 14,
+                width: "100%"
+              },
+            ]}
+            value={id}
+            onChangeText={setId}
+            placeholder="Enter invite ID"
+            autoCapitalize="none"
+          />
+        </View>
 
-            <View className='mt-4'>
-                <Label text="Invitation Id" />
-                <PrimaryInput
-                    style={[formStyle.input, { borderColor: "black", borderWidth: 1, width: "auto" }]}
-                    value={id}
-                    onChangeText={setId}
-                    placeholder="Enter invite id"
-                />
-            </View>
+        {/* Join Button */}
+        <TouchableOpacity
+          onPress={handleSubmit}
+          disabled={uploading}
+          className={`mt-8 py-4 rounded-xl ${
+            uploading ? "bg-gray-400" : "bg-indigo-600"
+          }`}
+        >
+          {uploading ? (
+            <ActivityIndicator color="#fff" />
+          ) : (
+            <Text className="text-white text-center text-lg font-semibold">
+              Join Server
+            </Text>
+          )}
+        </TouchableOpacity>
 
-            <TouchableOpacity
-                onPress={handleSubmit}
-                disabled={uploading}
-                className={`mt-6 py-3 rounded-xl ${uploading ? 'bg-gray-400' : 'bg-blue-600'}`}
-            >
-                <Text className="text-white text-center font-semibold">
-                    {uploading ? 'Loading...' : 'Join'}
-                </Text>
-            </TouchableOpacity>
-
-        </PrimaryLayout>
+        {/* Hint Text */}
+        <Text className="text-center text-gray-400 text-sm mt-6">
+          Need an invite? Ask a friend or create your own server.
+        </Text>
+      </View>
+    </PrimaryLayout>
     )
 }
 

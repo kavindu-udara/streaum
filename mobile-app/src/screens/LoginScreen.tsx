@@ -69,55 +69,82 @@ const LoginScreen = () => {
 
   return (
     <PrimaryLayout>
-      <View className="mb-20" style={formStyle.formContainer}>
-
-        <View style={formStyle.header}>
-          <H1Text text="Login" />
-          <Text style={formStyle.subtitle}>Enter Login Details</Text>
+      <View className="flex-1 justify-center px-6 py-10">
+        {/* Header */}
+        <View className="mb-8 items-center">
+          <H1Text text="Welcome Back 👋" />
+          <Text className="text-gray-500 text-base mt-1">
+            Log in to continue chatting
+          </Text>
         </View>
 
-        {error && <ErrorMessage text={error} setText={setError} />}
-
-        {/* input group - email */}
-        <View style={formStyle.inputGroup}>
-          <Label text="Email" />
-          <View style={formStyle.inputContainer}>
-            <PrimaryInput
-              value={email}
-              onChangeText={setEmail}
-              placeholder="Email address"
-              keyboardType="email-address"
-              autoCapitalize="none"
-              style={formStyle.input}
-            />
+        {/* Error Message */}
+        {error && (
+          <View className="mb-3">
+            <ErrorMessage text={error} setText={setError} />
           </View>
+        )}
+
+        {/* Email Input */}
+        <View className="mb-6">
+          <Label text="Email" />
+          <PrimaryInput
+            value={email}
+            onChangeText={setEmail}
+            placeholder="Enter your email"
+            keyboardType="email-address"
+            autoCapitalize="none"
+            style={[
+              formStyle.input,
+              {
+                borderColor: "#d1d5db",
+                borderWidth: 1,
+                borderRadius: 10,
+                backgroundColor: "#fff",
+                paddingHorizontal: 14,
+                width : "100%"
+              },
+            ]}
+          />
         </View>
 
-        {/* input group - password */}
-        <View style={formStyle.inputGroup}>
+        {/* Password Input */}
+        <View className="mb-10">
           <Label text="Password" />
           <PasswordInput value={password} setPassword={setPassword} />
         </View>
 
+        {/* Login Button */}
         <PrimaryPressable
           onPress={handleSubmit}
           disabled={isLoading}
-          style={formStyle.submitButton}
+          className={`py-4 rounded-xl shadow-md ${isLoading ? "bg-gray-400" : "bg-indigo-600"
+            }`}
         >
           {isLoading ? (
-            <View style={formStyle.loadingContainer}>
+            <View className="flex flex-row justify-center items-center">
               <ActivityIndicator size="small" color="#fff" />
             </View>
           ) : (
-            <Text style={formStyle.submitButtonText}>Login</Text>
+            <Text className="text-white text-center text-lg font-semibold">
+              Login
+            </Text>
           )}
         </PrimaryPressable>
-        
-        <View style={formStyle.secondaryTextContainer}>
-          <Text style={formStyle.secondaryText}>Don't have an account? </Text>
+
+        {/* Divider */}
+        <View className="flex-row items-center justify-center mt-5 mb-3">
+          <View className="h-[1px] bg-gray-300 w-1/4" />
+          <Text className="mx-3 text-gray-500">or</Text>
+          <View className="h-[1px] bg-gray-300 w-1/4" />
+        </View>
+
+        {/* Sign Up Redirect */}
+        <View className="flex-row justify-center mt-2">
+          <Text className="text-gray-500">Don’t have an account? </Text>
           <Text
-            style={formStyle.link}
             onPress={() => navigation.navigate("Register")}
+            className="text-indigo-600 font-semibold"
           >
             Sign Up
           </Text>

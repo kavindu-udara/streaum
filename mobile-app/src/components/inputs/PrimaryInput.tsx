@@ -67,6 +67,7 @@ const PrimaryInput = ({
   style,
   keyboardType,
   autoCapitalize,
+  className
 }: {
   value?: string;
   onChangeText?: Dispatch<SetStateAction<string>>;
@@ -76,6 +77,7 @@ const PrimaryInput = ({
   style?: StyleProp<TextStyle>;
   keyboardType?: KeyboardTypeOptions;
   autoCapitalize?: "none" | "sentences" | "words" | "characters" | undefined;
+  className? : string
 }) => {
   return (
     <TextInput
@@ -87,6 +89,7 @@ const PrimaryInput = ({
       onChangeText={onChangeText}
       keyboardType={keyboardType ? keyboardType : "default"}
       autoCapitalize={autoCapitalize ? autoCapitalize : "none"}
+      className={className}
     />
   );
 };

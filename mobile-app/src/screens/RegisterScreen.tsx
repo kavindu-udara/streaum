@@ -2,6 +2,9 @@ import {
   View,
   Text,
   ActivityIndicator,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
 } from "react-native";
 import React, { useState } from "react";
 import H1Text from "../components/text/H1Text";
@@ -67,7 +70,7 @@ const RegisterScreen = () => {
       email,
       password,
     }).then((res) => {
-        console.log(res.data);
+      console.log(res.data);
       setIsLoading(false);
       if (res.data.success) {
         navigation.navigate("Login");
@@ -79,94 +82,123 @@ const RegisterScreen = () => {
       setError("An error occurred. Please try again.");
       console.error(err);
     });
-    
+
   };
 
   return (
     <PrimaryLayout>
-        <View style={formStyle.formContainer}>
-          <View style={formStyle.header}>
+      <KeyboardAvoidingView
+        style={{ flex: 1 }}
+        behavior={Platform.OS === "ios" ? "padding" : undefined}
+      >
+        <ScrollView
+          contentContainerStyle={{
+            padding: 24,
+            flexGrow: 1,
+            justifyContent: "center",
+          }}
+        >
+          {/* Header */}
+          <View className="mb-8 items-center">
             <H1Text text="Create Account" />
-            <Text style={formStyle.subtitle}>Sign up to get started</Text>
+            <Text className="text-gray-500 text-base mt-1">
+              Sign up to get started
+            </Text>
           </View>
 
+          {/* Error Message */}
           {error && <ErrorMessage text={error} setText={setError} />}
 
-          <View style={formStyle.nameRow}>
-            <View style={[formStyle.inputGroup, { flex: 1, marginRight: 8 }]}>
+          {/* Name Row */}
+          <View className="flex-row mb-4 gap-3 space-x-2">
+            <View className="flex-1">
               <Label text="First Name" />
-              <View style={formStyle.inputContainer}>
-                <PrimaryInput
-                  placeholder="First Name"
-                  value={firstName}
-                  onChangeText={setFirstName}
-                  style={formStyle.input}
-                />
-              </View>
-            </View>
-
-            <View style={[formStyle.inputGroup, { flex: 1, marginLeft: 8 }]}>
-              <Label text="Last Name" />
-              <View style={formStyle.inputContainer}>
-                <PrimaryInput
-                  placeholder="Last Name"
-                  value={lastName}
-                  onChangeText={setLastName}
-                  style={formStyle.input}
-                />
-              </View>
-            </View>
-          </View>
-
-          <View style={formStyle.inputGroup}>
-            <Label text="Email" />
-            <View style={formStyle.inputContainer}>
               <PrimaryInput
-                placeholder="Email address"
-                value={email}
-                onChangeText={setEmail}
-                keyboardType="email-address"
-                autoCapitalize="none"
-                style={formStyle.input}
+                placeholder="First Name"
+                value={firstName}
+                onChangeText={setFirstName}
+                className="bg-white border border-gray-300 rounded-xl px-4 py-3"
+                style={{ width: "100%" }}
+              />
+            </View>
+
+            <View className="flex-1">
+              <Label text="Last Name" />
+              <PrimaryInput
+                placeholder="Last Name"
+                value={lastName}
+                onChangeText={setLastName}
+                className="bg-white border border-gray-300 rounded-xl px-4 py-3 w-full"
+                style={{ width: "100%" }}
               />
             </View>
           </View>
 
-          <View style={formStyle.inputGroup}>
-            <Label text="Password" />
+          {/* Email Input */}
+          <View className="mb-4">
+            <Label text="Email" />
+            <PrimaryInput
+              placeholder="Email address"
+              value={email}
+              onChangeText={setEmail}
+              keyboardType="email-address"
+              autoCapitalize="none"
+              className="bg-white border border-gray-300 rounded-xl px-4 py-3"
+              style={{ width: "100%" }}
+            />
+          </View>
 
+          {/* Password Input */}
+          <View className="mb-4">
+            <Label text="Password" />
             <PasswordInput value={password} setPassword={setPassword} />
           </View>
 
-          <View style={formStyle.inputGroup}>
+          {/* Confirm Password Input */}
+          <View className="mb-6">
             <Label text="Confirm Password" />
-            <PasswordInput value={retypePassword} setPassword={setRetypePassword} placeholder="Confirm your password" />
+            <PasswordInput
+              value={retypePassword}
+              setPassword={setRetypePassword}
+              placeholder="Confirm your password"
+            />
           </View>
 
+          {/* Submit Button */}
           <PrimaryPressable
             onPress={handleSubmit}
             disabled={isLoading}
-            style={formStyle.submitButton}
+            className={`py-4 rounded-xl ${isLoading ? "bg-gray-400" : "bg-indigo-600"
+              }`}
           >
             {isLoading ? (
-              <View style={formStyle.loadingContainer}>
-                <ActivityIndicator size="small" color="#fff" />
-              </View>
+              <ActivityIndicator size="small" color="#fff" />
             ) : (
-              <Text style={formStyle.submitButtonText}>Create Account</Text>
+              <Text className="text-white text-center font-semibold text-lg">
+                Create Account
+              </Text>
             )}
           </PrimaryPressable>
 
-          <View style={formStyle.secondaryTextContainer}>
-            <Text style={formStyle.secondaryText}>Already have an account? </Text>
+          {/* Divider */}
+          <View className="flex-row items-center justify-center mt-5 mb-3">
+            <View className="h-[1px] bg-gray-300 w-1/4" />
+            <Text className="mx-3 text-gray-500">or</Text>
+            <View className="h-[1px] bg-gray-300 w-1/4" />
+          </View>
+
+          {/* Sign In Redirect */}
+          <View className="flex-row justify-center mt-6">
+            <Text className="text-gray-500">Already have an account? </Text>
             <Text
-              style={formStyle.link}
+              className="text-indigo-600 font-semibold"
               onPress={() => navigation.navigate("Login")}
             >
               Sign In
             </Text>
           </View>
-        </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
     </PrimaryLayout>
   );
 };

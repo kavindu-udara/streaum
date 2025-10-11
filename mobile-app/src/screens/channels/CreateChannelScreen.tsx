@@ -66,54 +66,101 @@ const CreateChannelScreen = () => {
 
     return (
         <PrimaryLayout>
-            <View className="mb-20" style={formStyle.formContainer}>
-
-                <View style={formStyle.header}>
+            <View className="flex-1 px-6 justify-center">
+                {/* Header */}
+                <View className="mb-10 items-center">
                     <H1Text text="Create Channel" />
-                    <Text style={formStyle.subtitle}>Enter Channel Details</Text>
+                    <Text className="text-gray-500 text-base text-center mt-1">
+                        Fill in the details below to add a new channel.
+                    </Text>
                 </View>
 
-                {error && <ErrorMessage text={error} setText={setError} />}
+                {/* Error */}
+                {error && (
+                    <View className="mb-3">
+                        <ErrorMessage text={error} setText={setError} />
+                    </View>
+                )}
 
-                {/* input group - name */}
-                <View style={formStyle.inputGroup}>
-                    <Label text="Name" />
-                    <View style={formStyle.inputContainer}>
+                {/* Channel Name */}
+                <View className="mb-6">
+                    <Label text="Channel Name" />
+                    <View className="mt-2">
                         <PrimaryInput
                             value={name}
                             onChangeText={setName}
                             placeholder="Enter channel name"
                             keyboardType="default"
                             autoCapitalize="none"
-                            style={formStyle.input}
+                            style={[
+                                formStyle.input,
+                                {
+                                    borderColor: "#d1d5db",
+                                    borderWidth: 1,
+                                    borderRadius: 10,
+                                    paddingHorizontal: 14,
+                                    backgroundColor: "#fff",
+                                    width : "100%"
+                                },
+                            ]}
                         />
                     </View>
                 </View>
 
-                {/* input group - type */}
-                <View style={formStyle.inputGroup}>
+                {/* Channel Type */}
+                <View className="mb-8">
                     <Label text="Channel Type" />
-                    <Selector items={channelTypes} setItems={setChannelTypes} value={channelType} setValue={setChannelType} placeholder='Select Channel Type' />
+                    <View className="mt-2">
+                        <Selector
+                            items={channelTypes}
+                            setItems={setChannelTypes}
+                            value={channelType}
+                            setValue={setChannelType}
+                            placeholder="Select Channel Type"
+                        />
+                    </View>
                 </View>
 
+                {/* Submit Button */}
                 <PrimaryPressable
                     onPress={handleSubmit}
                     disabled={isLoading}
-                    style={formStyle.submitButton}
+                    className={`py-4 rounded-xl ${isLoading ? "bg-gray-400" : "bg-indigo-600"
+                        }`}
+                    style={{
+                        backgroundColor: "#4f46e5",
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 10,
+                    }}
                 >
                     {isLoading ? (
-                        <View style={formStyle.loadingContainer}>
+                        <View className="flex flex-row justify-center items-center">
                             <ActivityIndicator size="small" color="#fff" />
                         </View>
                     ) : (
-                        <Text style={formStyle.submitButtonText}>Create</Text>
+                        <Text className="text-white text-center font-semibold">
+                            Create Channel
+                        </Text>
                     )}
                 </PrimaryPressable>
 
-                <PrimaryPressable onPress={() => { navigation.navigate("SingleServer", { serverId }) }} style={[formStyle.submitButton, { backgroundColor: 'gray', marginTop: 10 }]} disabled={isLoading}>
-                    <Text>Cancel</Text>
+                {/* Cancel Button */}
+                <PrimaryPressable
+                    onPress={() => navigation.navigate("SingleServer", { serverId })}
+                    className="py-4 rounded-xl bg-gray-500 mt-3"
+                    disabled={isLoading}
+                    style={{
+                        backgroundColor: "#4e4e4e",
+                        paddingVertical: 10,
+                        paddingHorizontal: 16,
+                        borderRadius: 10,
+                    }}
+                >
+                    <Text className="text-white text-center font-semibold">
+                        Cancel
+                    </Text>
                 </PrimaryPressable>
-
             </View>
         </PrimaryLayout>
     )
