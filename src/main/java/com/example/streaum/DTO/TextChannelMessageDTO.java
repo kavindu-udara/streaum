@@ -1,18 +1,19 @@
 package com.example.streaum.DTO;
 
 public class TextChannelMessageDTO {
-    private String message;
+    private String text;
     private String name;
+    private String sender;
     private String createdAt;
-    private String userId;
+    private String id;
     private String token;
 
     public String getMessage() {
-        return message;
+        return text;
     }
 
     public void setMessage(String message) {
-        this.message = message;
+        this.text = message;
     }
 
     public String getName() {
@@ -20,11 +21,11 @@ public class TextChannelMessageDTO {
     }
 
     public String getUserId() {
-        return userId;
+        return id;
     }
 
     public void setUserId(String userId) {
-        this.userId = userId;
+        this.id = userId;
     }
 
     public String getTokenId() {
@@ -47,11 +48,12 @@ public class TextChannelMessageDTO {
         this.createdAt = createdAt;
     }
 
-    public TextChannelMessageDTO(String userId, String message, String name, String createdAt, String token) {
-        this.message = message;
+    public TextChannelMessageDTO(String userId, String message, String name, String createdAt, String token, String sender) {
+        this.text = message;
         this.name = name;
         this.createdAt = createdAt;
-        this.userId = userId;
+        this.id = userId;
         this.token = token;
+        this.sender = sender;
     }
 }

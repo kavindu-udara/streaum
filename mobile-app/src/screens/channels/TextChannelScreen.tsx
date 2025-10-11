@@ -5,6 +5,7 @@ import { RootStackParamList } from '../../../types/navigation'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RenderMessage from '../../components/rows/RenderMessage'
+import api from '../../../axios'
 
 interface Message {
     id: string;
@@ -26,8 +27,7 @@ const TextChannelScreen = () => {
     const [token, setToken] = useState<string | null>(null);
 
     const [messages, setMessages] = useState<Message[]>([
-        { id: "1", text: "Hey there! 👋", sender: "other", name : "new" },
-        { id: "2", text: "Hi! How’s it going?", sender: "me", name : "gg" },
+        { id: "1", text: "Say something!", sender: "me", name : "auto generated" },
     ]);
 
     const [newMessage, setNewMessage] = useState("");
@@ -36,6 +36,7 @@ const TextChannelScreen = () => {
     const handleSocketOnOpen = () => {
         console.log('Connected to chat!');
     }
+
     const getNextMessageId = () => {
         if (messages.length === 0) return "1";
         const maxId = Math.max(...messages.map(m => Number(m.id)));
@@ -44,13 +45,27 @@ const TextChannelScreen = () => {
 
     const handleSocketOnMessage = (event: MessageEvent<any>) => {
         console.log("Message:", event.data)
-        // {"message":"{\"text\":\"hehe\"}","name":"fname lname","createdAt":"Sun Oct 12 03:22:16 IST 2025","userId":"1"}
         const data = JSON.parse(event.data);
 
-        const message: Message = { id: Date.now().toString(), text: data.message, sender: data.token != token ? "other" : "me", name : data.name };
+        const message: Message = { id: Date.now().toString(), text: data.text, sender: data.token != token ? "other" : "me", name : data.name };
 
         setMessages(prev => [...prev, message]);
 
+    }
+
+    const loadPrevMessages = async () => {
+        api.get("/text-channel-history", {
+            params :{
+                channelId
+            }
+        }).then(res => {
+            console.log(res.data);
+            if(res.data.success){
+                setMessages(res.data.history);
+            }
+        }).catch(err => {
+            console.log(err);
+        })
     }
 
     useEffect(() => {
@@ -114,6 +129,7 @@ const TextChannelScreen = () => {
             const token = (await AsyncStorage.getItem("token"))?.toString();
             if (token) {
                 setToken(token);
+                await loadPrevMessages();
                 // initWebSocker(token);
             }
         };
@@ -132,12 +148,10 @@ const TextChannelScreen = () => {
         };
 
         // Send message via WebSocketnew
-        // websocket?.send(JSON.stringify({ text: message.text }));
         websocket?.send(message.text);
 
         // Update local message list
 
-        // setMessages((prev) => [...prev, message]);
         setNewMessage("");
 
     };
@@ -158,7 +172,7 @@ const TextChannelScreen = () => {
                 <FlatList
                     ref={flatListRef}
                     data={messages}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(_, index) => index.toString()}
                     renderItem={({ item }) => (
                         <RenderMessage item={item} />
                     )}

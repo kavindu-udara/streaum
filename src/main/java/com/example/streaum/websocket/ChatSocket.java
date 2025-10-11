@@ -181,7 +181,7 @@ public class ChatSocket {
         hibernateSession.getTransaction().commit();
         hibernateSession.close();
 
-        TextChannelMessageDTO newTextChannelMessageDTO = new TextChannelMessageDTO(userId,message, foundUser.getFirstName() + " " + foundUser.getLastName(), textChannelHistory.getCreatedAt().toString(), token);
+        TextChannelMessageDTO newTextChannelMessageDTO = new TextChannelMessageDTO(userId,message, foundUser.getFirstName() + " " + foundUser.getLastName(), textChannelHistory.getCreatedAt().toString(), token, "");
 
         Gson gson = new Gson();
         String formattedMessage = String.valueOf(gson.toJsonTree(newTextChannelMessageDTO));
