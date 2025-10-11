@@ -9,6 +9,7 @@ import { NavigationPropType } from '../../../types/navigation';
 const ChannelRow = ({ channel, serverId }: { channel: ChannelRes, serverId: string }) => {
 
     const navigation = useNavigation<NavigationPropType>();
+  const isTextChannel = channel.type === "TEXT";
 
     const handleOnPress = () => {
         if (channel.type === "TEXT") {
@@ -19,19 +20,23 @@ const ChannelRow = ({ channel, serverId }: { channel: ChannelRes, serverId: stri
     }
 
     return (
-        <Pressable onPress={handleOnPress}>
-            <View className='mb-3 p-5 flex flex-row gap-5 items-center border border-slate-300 '>
-                {/* icon */}
-                {
-                    channel.type === "TEXT" ? (
-                        <Fontisto name="hashtag" size={24} color="black" />
-                    ) : (
-                        <AntDesign name="sound" size={24} color="black" />
-                    )
-                }
-                <Text className='font-semibold text-lg'>{channel.name}</Text>
-            </View>
-        </Pressable>
+        <Pressable
+      onPress={handleOnPress}
+      className="mb-3"
+      android_ripple={{ color: "#e5e7eb" }} // subtle ripple effect on Android
+    >
+      <View className="flex-row items-center gap-4 p-4 bg-white rounded-xl border border-gray-200 ">
+        {/* Channel Icon */}
+        {isTextChannel ? (
+          <Fontisto name="hashtag" size={24} color="#4f46e5" />
+        ) : (
+          <AntDesign name="sound" size={24} color="#4f46e5" />
+        )}
+
+        {/* Channel Name */}
+        <Text className="text-lg font-semibold text-gray-800">{channel.name}</Text>
+      </View>
+    </Pressable>
     )
 }
 

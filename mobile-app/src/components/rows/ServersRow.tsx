@@ -21,15 +21,15 @@ const ServersRow = ({ server }: { server: Server }) => {
     ? { uri: `${EXPO_PUBLIC_API_URL}/files/${server.image}` }
     : ServerImage;
 
-    const handlePress = () => {
-      console.log("Pressed server: ", server.id);
-      navigation.navigate('SingleServer', { serverId: server.id });
-    }
+  const handlePress = () => {
+    console.log("Pressed server: ", server.id);
+    navigation.navigate('SingleServer', { serverId: server.id });
+  }
 
   return (
-   <Pressable
+    <Pressable
       onPress={handlePress}
-      className="w-full bg-white flex flex-row items-center p-4 mb-3 rounded-xl border border-slate-200 shadow-sm active:opacity-80"
+      className="w-full bg-white flex flex-row items-center p-4 mb-3 rounded-xl border border-slate-200 active:opacity-80"
       android_ripple={{ color: "#e5e7eb" }}
       style={{
         elevation: 2, // subtle shadow for Android
