@@ -6,6 +6,7 @@ import { NavigationPropType } from "../../types/navigation";
 import ServersRow from "../components/rows/ServersRow";
 import api from "../../axios";
 import { Server } from "../../types";
+import PrimaryPressable from "../components/buttons/PrimaryPressable";
 
 type Status = "Loading" | "Success" | "Error" | "Not-Found";
 
@@ -32,10 +33,6 @@ const HomeScreen = () => {
           err.message || err ||
           "An error occurred while fetching servers"
         );
-
-        if(!err.response.data.success){
-          navigation.navigate("Login");
-        }
 
         if (err.response && err.response.status === 401) {
           navigation.navigate("Login");
@@ -65,6 +62,24 @@ const HomeScreen = () => {
 
   return (
     <View>
+
+      <View className="flex flex-row items-center justify-between">
+        <PrimaryPressable
+          onPress={() =>
+            navigation.navigate("CreateServer")
+          }
+          style={{
+            backgroundColor: "#4f46e5",
+            paddingVertical: 10,
+            paddingHorizontal: 16,
+            borderRadius: 10,
+          }}
+        >
+          <Text className="text-white font-semibold text-base">
+            Create Server
+          </Text>
+        </PrimaryPressable>
+      </View>
 
       {status === "Loading" ? (
         <Text>Loading</Text>

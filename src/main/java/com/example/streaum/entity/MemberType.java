@@ -4,4 +4,5 @@ public enum MemberType {
     ADMIN,
     MEMBER,
     CREATOR,
+    REMOVED
 }

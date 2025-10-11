@@ -17,6 +17,15 @@ public class ChannelService {
         this.session = session;
     }
 
+    public Channel findChannelById(String id) {
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
+        Root<Channel> root = cq.from(Channel.class);
+        cq.select(root).where(cb.equal(root.get("id"), id));
+        List<Channel> channels = session.createQuery(cq).getResultList();
+        return channels.isEmpty() ? null : channels.get(0);
+    }
+
     // Fix: combine predicates and compare enum with enum (not toString)
     public Channel findChannelByNameServerAndType(Server server, String name, ChannelType type) {
         CriteriaBuilder cb = session.getCriteriaBuilder();
@@ -42,6 +51,17 @@ public class ChannelService {
         cq.select(root).where(cb.equal(root.get("server"), server));
         cq.orderBy(cb.asc(root.get("name")));
         return session.createQuery(cq).getResultList();
+    }
+
+    public Channel findChannelsByNameServer(Server server) {
+        CriteriaBuilder cb = session.getCriteriaBuilder();
+        CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
+        Root<Channel> root = cq.from(Channel.class);
+        cq.select(root).where(cb.equal(root.get("server"), server));
+        cq.orderBy(cb.asc(root.get("name")));
+
+        List<Channel> channels = session.createQuery(cq).getResultList();
+        return channels.isEmpty() ? null : channels.get(0);
     }
 
     // Fix: don't overwrite WHERE; combine server and type

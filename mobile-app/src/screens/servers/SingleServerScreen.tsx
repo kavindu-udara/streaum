@@ -1,4 +1,4 @@
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, ScrollView } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RouteProp, useNavigation, useRoute } from '@react-navigation/native'
 import { NavigationPropType, RootStackParamList } from '../../../types/navigation'
@@ -46,46 +46,83 @@ const SingleServerScreen = () => {
     }, [serverId]);
 
     return (
-        <View>
+        <ScrollView className="flex-1 bg-gray-50">
+      <View className="px-5 py-6 space-y-6">
 
-            {error && <ErrorMessage text={error} setText={setError} />}
-
-            <PrimaryPressable onPress={() => { navigation.navigate("CreateChannel", { serverId }) }} style={formStyle.submitButton}>
-                <Text>Create New Channel</Text>
-            </PrimaryPressable>
-            <Text>Server ID: {serverId}</Text>
-
-            <View>
-                <Text className='text-2xl font-bold'>Text Channels</Text>
-                {responseData?.textChannels && responseData.textChannels.length > 0 ? (
-                    <FlatList data={responseData.textChannels}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <ChannelRow serverId={serverId} channel={item} />
-                        )}
-                    />
-                ) : (
-                    <Text className='text-lg'>No text channels available.</Text>
-                )}
-            </View>
-
-            <View>
-                <Text className='text-2xl font-bold'>Voice Channels</Text>
-                {responseData?.voiceChannels && responseData.voiceChannels.length > 0 ? (
-                    <FlatList data={responseData.voiceChannels}
-                        keyExtractor={(item) => item.id.toString()}
-                        renderItem={({ item }) => (
-                            <ChannelRow serverId={serverId} channel={item} />
-                        )}
-                    />
-                ) : (
-                    <Text className='text-lg'>No voice channels available.</Text>
-                )}
-            </View>
-
-            {isLoading && <Text>Loading...</Text>}
-
+        {/* Header Section */}
+        <View className="flex flex-row items-center justify-between">
+          <PrimaryPressable
+            onPress={() =>
+              navigation.navigate("CreateChannel", { serverId })
+            }
+            style={{
+              backgroundColor: "#4f46e5",
+              paddingVertical: 10,
+              paddingHorizontal: 16,
+              borderRadius: 10,
+            }}
+          >
+            <Text className="text-white font-semibold text-base">
+              + New Channel
+            </Text>
+          </PrimaryPressable>
         </View>
+
+        {/* Error Message */}
+        {error && <ErrorMessage text={error} setText={setError} />}
+
+        {/* Text Channels */}
+        <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200">
+          <Text className="text-xl font-bold text-gray-900 mb-3">
+            💬 Text Channels
+          </Text>
+
+          {responseData?.textChannels &&
+          responseData.textChannels.length > 0 ? (
+            <FlatList
+              data={responseData.textChannels}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <ChannelRow serverId={serverId} channel={item} />
+              )}
+            />
+          ) : (
+            <Text className="text-gray-500 text-base">
+              No text channels available.
+            </Text>
+          )}
+        </View>
+
+        {/* Voice Channels */}
+        <View className="bg-white rounded-2xl shadow-sm p-5 border border-gray-200">
+          <Text className="text-xl font-bold text-gray-900 mb-3">
+            🔊 Voice Channels
+          </Text>
+
+          {responseData?.voiceChannels &&
+          responseData.voiceChannels.length > 0 ? (
+            <FlatList
+              data={responseData.voiceChannels}
+              keyExtractor={(item) => item.id.toString()}
+              renderItem={({ item }) => (
+                <ChannelRow serverId={serverId} channel={item} />
+              )}
+            />
+          ) : (
+            <Text className="text-gray-500 text-base">
+              No voice channels available.
+            </Text>
+          )}
+        </View>
+
+        {/* Loading State */}
+        {isLoading && (
+          <View className="flex items-center py-4">
+            <Text className="text-gray-500 text-base">Loading...</Text>
+          </View>
+        )}
+      </View>
+    </ScrollView>
     )
 }
 

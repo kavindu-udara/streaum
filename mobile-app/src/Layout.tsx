@@ -51,7 +51,7 @@ const Layout = () => {
           component={SingleServerScreen}
           options={{
             headerShown: true,
-            headerTitle : "Single Server"
+            headerTitle : "Server Dashboard"
           }}
         />
         <Stack.Screen

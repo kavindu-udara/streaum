@@ -8,9 +8,13 @@ import PrimaryLayout from '../../components/layouts/PrimaryLayout';
 import ErrorMessage from '../../components/messages/ErrorMessage';
 import api from '../../../axios';
 import { AxiosResponse } from 'axios';
+import { useNavigation } from '@react-navigation/native';
+import { NavigationPropType } from '../../../types/navigation';
 const defaultServerImg = require("../../assets/images/default-server-image.jpeg");
 
 const CreateServerScreen = () => {
+
+    const navigation = useNavigation<NavigationPropType>();
 
     const formStyle = formStyles();
     const [name, setName] = useState('');
@@ -101,6 +105,7 @@ const CreateServerScreen = () => {
                 setSelectedImage(null);
                 setIsImageUploaded(false);
                 setUploadedImageUrl(null);
+                navigation.navigate('Home');
                 return;
             }
             setError(res.data.message || 'An error occurred. Please try again.');

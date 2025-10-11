@@ -6,11 +6,11 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Settings: undefined;
-  CreateServer : undefined;
-  SingleServer : { serverId: string };
-  CreateChannel : { serverId: string };
-  TextChannel : { channelId: number, serverId: string };
-  VoiceChannel : { channelId: number, serverId: string };
+  CreateServer: undefined;
+  SingleServer: { serverId: string };
+  CreateChannel: { serverId: string };
+  TextChannel: { channelId: number; serverId: string; channelName: string };
+  VoiceChannel: { channelId: number; serverId: string; channelName: string };
 };
 
 export type NavigationPropType = NativeStackNavigationProp<RootStackParamList>;

@@ -12,9 +12,9 @@ const ChannelRow = ({ channel, serverId }: { channel: ChannelRes, serverId: stri
 
     const handleOnPress = () => {
         if (channel.type === "TEXT") {
-            navigation.navigate("TextChannel", { channelId: channel.id, serverId });
+            navigation.navigate("TextChannel", { channelId: channel.id, serverId, channelName: channel.name });
         } else if (channel.type === "VOICE") {
-            navigation.navigate("VoiceChannel", { channelId: channel.id, serverId });
+            navigation.navigate("VoiceChannel", { channelId: channel.id, serverId, channelName: channel.name });
         }
     }
 

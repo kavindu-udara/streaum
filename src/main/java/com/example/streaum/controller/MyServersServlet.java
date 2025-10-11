@@ -47,6 +47,7 @@ public class MyServersServlet extends HttpServlet {
             ServerService serverService = new ServerService(session);
             Server foundServer = serverService.findServerById(serverId);
             if (foundServer == null) {
+                resStatus = HttpServletResponse.SC_NOT_FOUND;
                 resObj.addProperty("message", "Server not found.");
                 return;
             }
@@ -114,15 +115,17 @@ public class MyServersServlet extends HttpServlet {
 //            find servers list with user
             UserHasServersService userHasServersService = new UserHasServersService(session);
             List<UserHasServers> entities = userHasServersService.findAllUserHasServersByUser(selectedUser);
-            List<ServerDTO> servers = entities.stream()
-                    .map(ServerDTO::new)
-                    .toList();
 
-            if (entities.isEmpty()) {
+            if (entities == null || entities.isEmpty()) {
                 resStatus = HttpServletResponse.SC_NOT_FOUND;
                 resObj.addProperty("message", "No servers found.");
                 return;
             }
+
+            List<ServerDTO> servers = entities.stream()
+                    .map(ServerDTO::new)
+                    .toList();
+
 
             isSuccess = true;
             resStatus = HttpServletResponse.SC_OK;
