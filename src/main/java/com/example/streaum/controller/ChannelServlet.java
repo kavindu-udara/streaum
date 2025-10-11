@@ -64,6 +64,7 @@ public class ChannelServlet extends HttpServlet {
                 Channel foundChannel = channelService.findChannelByNameServerAndType(foundServer, name, channelType);
 
                 if (foundChannel != null) {
+                    System.out.println("Channel name already exists." + name);
                     resObj.addProperty("message", "Channel already exists.");
                     return;
                 }

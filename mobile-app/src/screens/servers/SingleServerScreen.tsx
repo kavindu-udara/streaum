@@ -61,7 +61,7 @@ const SingleServerScreen = () => {
                     <FlatList data={responseData.textChannels}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <ChannelRow channel={item} />
+                            <ChannelRow serverId={serverId} channel={item} />
                         )}
                     />
                 ) : (
@@ -75,7 +75,7 @@ const SingleServerScreen = () => {
                     <FlatList data={responseData.voiceChannels}
                         keyExtractor={(item) => item.id.toString()}
                         renderItem={({ item }) => (
-                            <ChannelRow channel={item} />
+                            <ChannelRow serverId={serverId} channel={item} />
                         )}
                     />
                 ) : (

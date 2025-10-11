@@ -17,16 +17,21 @@ public class ChannelService {
         this.session = session;
     }
 
+    // Fix: combine predicates and compare enum with enum (not toString)
     public Channel findChannelByNameServerAndType(Server server, String name, ChannelType type) {
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
         Root<Channel> root = cq.from(Channel.class);
 
-        cq.select(root).where(cb.equal(root.get("server"), server));
-        cq.select(root).where(cb.equal(root.get("name"), name));
-        cq.select(root).where(cb.equal(root.get("type"), type.toString()));
+        cq.select(root).where(
+            cb.and(
+                cb.equal(root.get("server"), server),
+                cb.equal(root.get("name"), name),
+                cb.equal(root.get("type"), type)
+            )
+        );
 
-        List<Channel> channels = session.createQuery(cq).getResultList();
+        List<Channel> channels = session.createQuery(cq).setMaxResults(1).getResultList();
         return channels.isEmpty() ? null : channels.get(0);
     }
 
@@ -39,13 +44,20 @@ public class ChannelService {
         return session.createQuery(cq).getResultList();
     }
 
+    // Fix: don't overwrite WHERE; combine server and type
     public List<Channel> findAllChannelsByNameServerAndType(Server server, ChannelType type) {
         CriteriaBuilder cb = session.getCriteriaBuilder();
         CriteriaQuery<Channel> cq = cb.createQuery(Channel.class);
         Root<Channel> root = cq.from(Channel.class);
-        cq.select(root).where(cb.equal(root.get("server"), server));
-        cq.select(root).where(cb.equal(root.get("type"), type));
+
+        cq.select(root).where(
+            cb.and(
+                cb.equal(root.get("server"), server),
+                cb.equal(root.get("type"), type)
+            )
+        );
         cq.orderBy(cb.asc(root.get("name")));
+
         return session.createQuery(cq).getResultList();
     }
 

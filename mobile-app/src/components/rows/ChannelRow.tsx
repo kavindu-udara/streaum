@@ -6,15 +6,15 @@ import Fontisto from '@expo/vector-icons/Fontisto';
 import { useNavigation } from '@react-navigation/native';
 import { NavigationPropType } from '../../../types/navigation';
 
-const ChannelRow = ({ channel }: { channel: ChannelRes }) => {
+const ChannelRow = ({ channel, serverId }: { channel: ChannelRes, serverId: string }) => {
 
     const navigation = useNavigation<NavigationPropType>();
 
     const handleOnPress = () => {
         if (channel.type === "TEXT") {
-            navigation.navigate("TextChannel", { channelId: channel.id });
+            navigation.navigate("TextChannel", { channelId: channel.id, serverId });
         } else if (channel.type === "VOICE") {
-            navigation.navigate("VoiceChannel", { channelId: channel.id });
+            navigation.navigate("VoiceChannel", { channelId: channel.id, serverId });
         }
     }
 
