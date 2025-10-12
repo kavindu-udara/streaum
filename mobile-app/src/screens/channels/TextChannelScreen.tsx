@@ -6,13 +6,7 @@ import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import RenderMessage from '../../components/rows/RenderMessage'
 import api from '../../../axios'
-
-interface Message {
-    id: string;
-    text: string;
-    sender: "me" | "other";
-    name : string
-}
+import { Message } from '../../../types'
 
 type TextChannelRouteProp = RouteProp<RootStackParamList, 'TextChannel'>
 

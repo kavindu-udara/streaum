@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.Set;
 
-@WebServlet(name = "ServerInvitationServllet", urlPatterns = {"/server-invitation"})
+@WebServlet(name = "ServerInvitationServlet", urlPatterns = {"/server-invitation"})
 public class ServerInvitationServlet extends HttpServlet {
 
     @Override

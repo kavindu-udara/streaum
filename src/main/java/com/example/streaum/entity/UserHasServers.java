@@ -3,7 +3,6 @@ package com.example.streaum.entity;
 import jakarta.persistence.*;
 
 @Entity
-// Prefer underscores in table names; if you must keep a hyphen, use: @Table(name = "\"user-has-servers\"")
 @Table(name = "user_has_servers")
 public class UserHasServers {
 
@@ -25,7 +24,6 @@ public class UserHasServers {
     private User user;
 
     public UserHasServers() {
-        // JPA requires a no-arg constructor
     }
 
     public UserHasServers(MemberType type, Server server, User user) {

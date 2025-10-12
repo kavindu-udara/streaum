@@ -64,7 +64,7 @@ const CreateServerInvitationScreen = () => {
         })
     }
 
-    const handleCopy = () => {
+    const handleCopy =async () => {
         if (!responseData) return;
 
         (async () => {
