@@ -13,7 +13,7 @@ RUN --mount=type=cache,target=/root/.m2 mvn -B -DskipTests package
 # Runtime stage: deploy the WAR to Tomcat
 # Use Tomcat 9 if your app uses javax.servlet.* APIs (common for legacy web.xml apps).
 # If your app uses jakarta.servlet.* (Jakarta EE 9+), switch this to tomcat:10.1-jdk21-temurin.
-FROM tomcat:9.0-jdk21-temurin
+FROM tomcat:11.0.11-jdk21-temurin
 
 # Optional: make container timezone/locale predictable (adjust as needed)
 ENV TZ=UTC \
