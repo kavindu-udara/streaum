@@ -31,7 +31,7 @@ public class User extends BaseEntity{
         this.token = token;
     }
 
-    @Column(name = "token", unique = true)
+    @Column(name = "token",length = 2048, unique = true)
     private String token;
 
     @Enumerated
