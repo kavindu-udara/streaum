@@ -1,3 +1,13 @@
 <Context>
     <Environment name="JWT_SECRET" value="LS0tLS1CRUdJTiBSU0EgUFJJVkFURSBLRVktLS0tLQpNSUlDV2dJQkFBS0JnRXdlV1JvSVZXS1c0eUpzQ3EweUdCbC9sRlRNc3FwTXYxVWIyMXFMbnhoY3BqK3QxMVNSCkUyL3d4T2M0clI5VjRjZGxydEQ5WjdkWDBkVkVZN2Q1VmdpNHFzTi9YcjVsek1pMjlqVTZUYW54T3JYRG51U0YKdEY4Q3ZueXZXTi9PUUVqMmZ0N1E0VDN4ZGRMUU8yV1VrR2YzQU9JSndPOVg1WTA1alNvSkhueGRBZ01CQUFFQwpnWUEydnRENHJ5dXlCN0YralZRMGNzWHdlTmlYRU00ak82V1VzYjlXNVBwY3pDM3B1TDha" type="java.lang.String" />
+    <Resource name="jdbc/StreaumDB"
+              auth="Container"
+              type="javax.sql.DataSource"
+              driverClassName="com.mysql.cj.jdbc.Driver"
+              url="jdbc:mysql://database:3306/mydb?useSSL=false&amp;serverTimezone=UTC"
+              username="${DB_USER}"
+              password="${DB_PASS}"
+              maxTotal="20"
+              maxIdle="10"
+              maxWaitMillis="-1"/>
 </Context>

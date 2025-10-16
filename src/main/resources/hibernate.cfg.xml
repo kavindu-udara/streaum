@@ -7,15 +7,13 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://database:3306/${{DB_NAME}}?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="hibernate.connection.url">jdbc:mysql://database:3306/${DB_NAME}?useSSL=false&amp;serverTimezone=UTC</property>
         <property name="hibernate.connection.username">${DB_USER}</property>
         <property name="hibernate.connection.password">${DB_PASS}</property>
-
         <!-- Dialect -->
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</property>
 
-        <!-- Let Hibernate pick correct dialect automatically -->
-        <!-- <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property> -->
+        <property name="hibernate.connection.datasource">java:comp/env/jdbc/StreaumDB</property>
 
         <!-- Hibernate options -->
         <property name="hibernate.show_sql">true</property>
