@@ -24,9 +24,5 @@ RUN rm -rf /usr/local/tomcat/webapps/*
 # Find the built WAR (artifactId-version.war) and copy it as ROOT.war
 COPY --from=build /app/target/*.war /usr/local/tomcat/webapps/ROOT.war
 
-# Copy wait script
-COPY wait-for-db.sh /usr/local/tomcat/bin/wait-for-db.sh
-RUN chmod +x /usr/local/tomcat/bin/wait-for-db.sh
-
 EXPOSE 8080
 CMD ["catalina.sh", "run"]
