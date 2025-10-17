@@ -2,72 +2,59 @@ package com.example.streaum.hibernate;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
-import com.example.streaum.entity.*;
-import java.util.concurrent.TimeUnit;
+import org.hibernate.service.ServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+import java.io.InputStream;
+import java.util.Properties;
 
 public class HibernateUtil {
 
     private static final SessionFactory sessionFactory;
 
     static {
-        sessionFactory = buildSessionFactoryWithRetry();
-    }
+        try {
+            System.out.println("=== HIBERNATE CONFIGURATION START ===");
 
-    private static SessionFactory buildSessionFactoryWithRetry() {
-        final int maxRetries = 30;
-        final int retryDelaySeconds = 2;
+            // Method 1: Try standard configuration first
+            Configuration configuration = new Configuration();
 
-        for (int attempt = 1; attempt <= maxRetries; attempt++) {
-            try {
-                System.out.println("Attempting to connect to database (attempt " + attempt + "/" + maxRetries + ")");
+            // Debug: Check if file exists in classpath
+            InputStream configStream = HibernateUtil.class.getClassLoader()
+                    .getResourceAsStream("hibernate.cfg.xml");
 
-                // Read environment variables
-                String dbName = System.getenv("DB_NAME");
-                String dbUser = System.getenv("DB_USER");
-                String dbPass = System.getenv("DB_PASS");
-
-                Configuration configuration = new Configuration();
-
-                // Database connection settings
-                configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
-                configuration.setProperty("hibernate.connection.url",
-                        "jdbc:mysql://database:3306/" + dbName + "?useSSL=false&serverTimezone=UTC");
-                configuration.setProperty("hibernate.connection.username", dbUser);
-                configuration.setProperty("hibernate.connection.password", dbPass);
-                configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL8Dialect");
-                configuration.setProperty("hibernate.show_sql", "true");
-                configuration.setProperty("hibernate.hbm2ddl.auto", "update");
-
-                // Add all entity classes
-                configuration.addAnnotatedClass(User.class);
-                configuration.addAnnotatedClass(Server.class);
-                configuration.addAnnotatedClass(UserHasServers.class);
-                configuration.addAnnotatedClass(Channel.class);
-                configuration.addAnnotatedClass(TextChannelHistory.class);
-                configuration.addAnnotatedClass(ServerInvitation.class);
-
-                SessionFactory factory = configuration.buildSessionFactory();
-                System.out.println("Database connection established successfully!");
-                return factory;
-
-            } catch (Exception e) {
-                System.err.println("Database connection failed (attempt " + attempt + "/" + maxRetries + "): " + e.getMessage());
-
-                if (attempt == maxRetries) {
-                    System.err.println("Max retries reached. Could not connect to database.");
-                    throw new ExceptionInInitializerError(e);
-                }
-
-                try {
-                    TimeUnit.SECONDS.sleep(retryDelaySeconds);
-                } catch (InterruptedException ie) {
-                    Thread.currentThread().interrupt();
-                    throw new ExceptionInInitializerError(ie);
-                }
+            if (configStream != null) {
+                System.out.println("✓ hibernate.cfg.xml found in classpath");
+                configStream.close();
+            } else {
+                System.out.println("✗ hibernate.cfg.xml NOT found in classpath");
             }
-        }
 
-        throw new ExceptionInInitializerError(new RuntimeException("Failed to connect to database after " + maxRetries + " attempts"));
+            // Configure using the XML file
+            configuration.configure("hibernate.cfg.xml");
+
+            // Debug: Print configuration properties
+            Properties props = configuration.getProperties();
+            System.out.println("Hibernate Properties:");
+            props.forEach((key, value) ->
+                    System.out.println("  " + key + " = " + value)
+            );
+
+            // Build ServiceRegistry
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .build();
+
+            // Build SessionFactory
+            sessionFactory = configuration.buildSessionFactory(serviceRegistry);
+
+            System.out.println("✓ SessionFactory created successfully");
+            System.out.println("=== HIBERNATE CONFIGURATION END ===");
+
+        } catch (Throwable ex) {
+            System.err.println("❌ Initial SessionFactory creation failed: " + ex.getMessage());
+            ex.printStackTrace();
+            throw new ExceptionInInitializerError(ex);
+        }
     }
 
     public static SessionFactory getSessionFactory() {
@@ -77,6 +64,43 @@ public class HibernateUtil {
     public static void shutdown() {
         if (sessionFactory != null && !sessionFactory.isClosed()) {
             sessionFactory.close();
+            System.out.println("SessionFactory closed");
+        }
+    }
+
+    // Alternative method for programmatic configuration
+    public static SessionFactory createSessionFactoryProgrammatically() {
+        try {
+            Configuration configuration = new Configuration();
+
+            // Database settings
+            configuration.setProperty("hibernate.connection.driver_class", "com.mysql.cj.jdbc.Driver");
+            configuration.setProperty("hibernate.connection.url", "jdbc:mysql://database:3306/streaum?useSSL=false&serverTimezone=UTC");
+            configuration.setProperty("hibernate.connection.username", "myuser");
+            configuration.setProperty("hibernate.connection.password", "mypassword");
+            configuration.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
+
+            // Hibernate options
+            configuration.setProperty("hibernate.show_sql", "true");
+            configuration.setProperty("hibernate.format_sql", "true");
+            configuration.setProperty("hibernate.hbm2ddl.auto", "update");
+            configuration.setProperty("hibernate.connection.pool_size", "10");
+
+            // Add entity classes
+            configuration.addAnnotatedClass(com.example.streaum.entity.User.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Server.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.UserHasServers.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Channel.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.TextChannelHistory.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.ServerInvitation.class);
+
+            ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
+                    .applySettings(configuration.getProperties())
+                    .build();
+
+            return configuration.buildSessionFactory(serviceRegistry);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create SessionFactory programmatically", e);
         }
     }
 }

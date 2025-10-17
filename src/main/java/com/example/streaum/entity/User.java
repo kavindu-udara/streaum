@@ -3,7 +3,7 @@ package com.example.streaum.entity;
 import jakarta.persistence.*; // changed from javax.persistence
 
 @Entity
-@Table(name = "user")
+@Table(name = "users")
 public class User extends BaseEntity{
 
     @Id

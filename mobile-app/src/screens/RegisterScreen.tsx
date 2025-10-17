@@ -80,7 +80,8 @@ const RegisterScreen = () => {
     }).catch((err) => {
       setIsLoading(false);
       setError("An error occurred. Please try again.");
-      console.error(err);
+      // console.error(err);
+      console.error(err.response.data || err.message || err || "An error occurred while creating the channel. Please try again.");
     });
 
   };

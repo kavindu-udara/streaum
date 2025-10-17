@@ -19,15 +19,17 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker image
-        run: docker build -t streaum:ci .
-
-      - name: Run container on fixed port 8080
-        run: docker run -d -p 8080:8080 --name streaum streaum:ci
+      - name: Build Docker
+        run: docker compose build
 
       - name: Wait for app to be ready
         env:
           PORT: 8080
+          JWT_SECRET : myjwtsecret
+          UPLOAD_DIR : /uploads
+          DB_USER : myuser
+          DB_PASS : mypassword
+          DB_NAME : streaum
         shell: bash
         run: |
           echo "Waiting for http://127.0.0.1:${PORT}/ ..."
