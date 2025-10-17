@@ -39,9 +39,9 @@ jobs:
               exit 0
             fi
 
-            if ! docker ps --filter "name=streaum" --filter "status=running" --format '{{.Names}}' | grep -q '^streaum$'; then
+            if ! docker ps --filter "name=streaum-war" --filter "status=running" --format '{{.Names}}' | grep -q '^streaum-war$'; then
               echo "Container exited unexpectedly. Logs:"
-              docker logs streaum || true
+              docker logs streaum-war || true
               exit 1
             fi
 
@@ -49,7 +49,7 @@ jobs:
           done
 
           echo "Timed out waiting for app to respond."
-          docker logs streaum || true
+          docker logs streaum-war || true
           exit 1
 
       - name: Smoke test root endpoint
@@ -61,14 +61,14 @@ jobs:
           echo "HTTP status: $STATUS"
           if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 400 ]; then
             echo "Unexpected HTTP status from root endpoint."
-            docker logs streaum || true
+            docker logs streaum-war || true
             exit 1
           fi
 
       - name: Show logs on failure
         if: failure()
-        run: docker logs streaum || true
+        run: docker logs streaum-war || true
 
       - name: Cleanup
         if: always()
-        run: docker rm -f streaum || true
+        run: docker rm -f streaum-war || true
