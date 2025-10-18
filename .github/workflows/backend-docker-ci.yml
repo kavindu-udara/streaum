@@ -19,7 +19,7 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build and Up Docker Compose
+      - name: Build Docker Compose
         env :
           JWT_SECRET : myjwtsecret
           UPLOAD_DIR : /uploads
@@ -28,13 +28,15 @@ jobs:
           DB_NAME : streaum
           PORT: 8080
 
-        run: docker compose up --build
+        run: docker compose build
 
       - name: Wait for app to be ready
         env:
           PORT: 8080
         shell: bash
         run: |
+          docker compose up
+          
           echo "Waiting for http://127.0.0.1:${PORT}/ ..."
           for i in {1..60}; do
             if curl -fsS "http://127.0.0.1:${PORT}/" -o /dev/null; then
