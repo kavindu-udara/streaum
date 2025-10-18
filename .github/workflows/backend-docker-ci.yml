@@ -19,17 +19,20 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Build Docker
-        run: docker compose build
-
-      - name: Wait for app to be ready
-        env:
-          PORT: 8080
+      - name: Build and Up Docker Compose
+        env :
           JWT_SECRET : myjwtsecret
           UPLOAD_DIR : /uploads
           DB_USER : myuser
           DB_PASS : mypassword
           DB_NAME : streaum
+          PORT: 8080
+
+        run: docker compose up --build
+
+      - name: Wait for app to be ready
+        env:
+          PORT: 8080
         shell: bash
         run: |
           echo "Waiting for http://127.0.0.1:${PORT}/ ..."
@@ -39,9 +42,9 @@ jobs:
               exit 0
             fi
 
-            if ! docker ps --filter "name=streaum-war" --filter "status=running" --format '{{.Names}}' | grep -q '^streaum-war$'; then
+            if ! docker ps --filter "name=streaum-app-1" --filter "status=running" --format '{{.Names}}' | grep -q '^streaum-app-1'; then
               echo "Container exited unexpectedly. Logs:"
-              docker logs streaum-war || true
+              docker logs streaum-app-1 || true
               exit 1
             fi
 
@@ -49,7 +52,7 @@ jobs:
           done
 
           echo "Timed out waiting for app to respond."
-          docker logs streaum-war || true
+          docker logs streaum-app-1 || true
           exit 1
 
       - name: Smoke test root endpoint
@@ -61,14 +64,14 @@ jobs:
           echo "HTTP status: $STATUS"
           if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 400 ]; then
             echo "Unexpected HTTP status from root endpoint."
-            docker logs streaum-war || true
+            docker logs streaum-app-1 || true
             exit 1
           fi
 
       - name: Show logs on failure
         if: failure()
-        run: docker logs streaum-war || true
+        run: docker logs streaum-app-1 || true
 
       - name: Cleanup
         if: always()
-        run: docker rm -f streaum-war || true
+        run: docker compose down
