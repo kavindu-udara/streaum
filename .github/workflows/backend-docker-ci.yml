@@ -27,16 +27,18 @@ jobs:
           DB_PASS : mypassword
           DB_NAME : streaum
           PORT: 8080
-
         run: docker compose build
+
+      - name: Start containers
+        env:
+          PORT: 8080
+        run: docker compose up -d
 
       - name: Wait for app to be ready
         env:
           PORT: 8080
         shell: bash
         run: |
-          docker compose up
-          
           echo "Waiting for http://127.0.0.1:${PORT}/ ..."
           for i in {1..60}; do
             if curl -fsS "http://127.0.0.1:${PORT}/" -o /dev/null; then
