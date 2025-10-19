@@ -32,6 +32,13 @@ public class HibernateUtil {
             // Configure using the XML file
             configuration.configure("hibernate.cfg.xml");
 
+            configuration.addAnnotatedClass(com.example.streaum.entity.User.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Server.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.UserHasServers.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Channel.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.TextChannelHistory.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.ServerInvitation.class);
+
             // Debug: Print configuration properties
             Properties props = configuration.getProperties();
             System.out.println("Hibernate Properties:");
