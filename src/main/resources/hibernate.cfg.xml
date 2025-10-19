@@ -3,9 +3,9 @@
     <session-factory>
         <!-- Database connection settings -->
         <property name="hibernate.connection.driver_class">com.mysql.cj.jdbc.Driver</property>
-        <property name="hibernate.connection.url">jdbc:mysql://database:3306/streaum?useSSL=false&amp;serverTimezone=UTC</property>
-        <property name="hibernate.connection.username">myuser</property>
-        <property name="hibernate.connection.password">mypassword</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost:3306/streaum?useSSL=false&amp;serverTimezone=UTC</property>
+        <property name="hibernate.connection.username">root</property>
+<!--        <property name="hibernate.connection.password"></property>-->
 
         <!-- Let Hibernate pick correct dialect automatically -->
 <!--         <property name="hibernate.dialect">org.hibernate.dialect.MySQLDialect</property>-->

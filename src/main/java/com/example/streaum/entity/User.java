@@ -1,6 +1,6 @@
 package com.example.streaum.entity;
 
-import jakarta.persistence.*; // changed from javax.persistence
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
