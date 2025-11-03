@@ -1,8 +1,5 @@
 package com.example.streaum.DTO;
 
-import com.example.streaum.entity.MemberType;
-import com.example.streaum.entity.Server;
-import com.example.streaum.entity.User;
 import com.example.streaum.entity.UserHasServers;
 
 public class ServerDTO {

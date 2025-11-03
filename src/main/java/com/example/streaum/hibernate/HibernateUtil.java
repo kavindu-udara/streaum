@@ -39,6 +39,10 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(com.example.streaum.entity.TextChannelHistory.class);
             configuration.addAnnotatedClass(com.example.streaum.entity.ServerInvitation.class);
 
+//
+            configuration.addAnnotatedClass(com.example.streaum.entity.Profile.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Admin.class);
+
             // Debug: Print configuration properties
             Properties props = configuration.getProperties();
             System.out.println("Hibernate Properties:");
@@ -100,6 +104,10 @@ public class HibernateUtil {
             configuration.addAnnotatedClass(com.example.streaum.entity.Channel.class);
             configuration.addAnnotatedClass(com.example.streaum.entity.TextChannelHistory.class);
             configuration.addAnnotatedClass(com.example.streaum.entity.ServerInvitation.class);
+
+//
+            configuration.addAnnotatedClass(com.example.streaum.entity.Profile.class);
+            configuration.addAnnotatedClass(com.example.streaum.entity.Admin.class);
 
             ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
                     .applySettings(configuration.getProperties())

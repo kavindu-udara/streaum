@@ -11,7 +11,6 @@ const ProfileSelectorCard = ({ profile, profiles, titleRef }: { profile: Profile
     const imageRef = useRef<HTMLImageElement | null>(null);
 
     const handleOnClick = () => {
-        console.log(`Profile selected: ${profile.name}`);
 
         if (!cardRef.current) return;
         const el = cardRef.current;
@@ -132,7 +131,9 @@ const ProfileSelectorCard = ({ profile, profiles, titleRef }: { profile: Profile
 
             {profile.isLocked && (
                 <div className='profile-selector-card-pin-input-div hidden flex-col gap-3 text-center text-sm dark:text-white text-slate-500 mt-1'>
-                    <input type="text" className='border px-3 py-1 rounded-xl' placeholder='Enter PIN' />
+                    <span className='border px-3 py-1 rounded-xl'>
+                    <input type="password" className='border px-3 py-1 rounded-xl' placeholder='Enter PIN' />
+                    </span>
                 </div>
             )}
 
