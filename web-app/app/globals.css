@@ -20,7 +20,9 @@
 }
 
 body {
-  background: var(--background);
+  background-image: url("/images/wallhaven-ogg3zp-svg.svg");
+  @apply bg-no-repeat bg-cover;
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  filter: brightness(0.8); 
 }
