@@ -12,3 +12,12 @@ export type Song = {
   title: string,
   description: string
 }
+
+export type Path = {
+    name: string,
+    path: string,
+    isDirectory: boolean,
+    size: number,
+    lastModified: string,
+    children: Path[]
+}
