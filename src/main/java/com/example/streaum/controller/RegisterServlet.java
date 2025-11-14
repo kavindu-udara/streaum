@@ -10,6 +10,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 
@@ -19,7 +20,7 @@ import java.io.IOException;
 public class RegisterServlet extends HttpServlet {
 
     @Override
-    protected void doPost(jakarta.servlet.http.HttpServletRequest request, jakarta.servlet.http.HttpServletResponse response) throws IOException {
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         Gson gson = new Gson();
         JsonObject reqObj = gson.fromJson(request.getReader(), JsonObject.class);
         JsonObject resObj = new JsonObject();

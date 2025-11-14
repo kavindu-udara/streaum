@@ -22,7 +22,6 @@ public class AdminServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        Gson gson = new Gson();
 
         boolean isSuccess = false;
         int resStatus = HttpServletResponse.SC_BAD_REQUEST;
@@ -40,6 +39,7 @@ public class AdminServlet extends HttpServlet {
             session.persist(newAdmin);
             session.getTransaction().commit();
 
+            isSuccess = true;
             resObj.addProperty("message", "User registered successfully.");
             resObj.addProperty("userId", newAdmin.getId());
 

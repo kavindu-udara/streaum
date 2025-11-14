@@ -15,10 +15,8 @@ public class HibernateUtil {
         try {
             System.out.println("=== HIBERNATE CONFIGURATION START ===");
 
-            // Method 1: Try standard configuration first
             Configuration configuration = new Configuration();
 
-            // Debug: Check if file exists in classpath
             InputStream configStream = HibernateUtil.class.getClassLoader()
                     .getResourceAsStream("hibernate.cfg.xml");
 

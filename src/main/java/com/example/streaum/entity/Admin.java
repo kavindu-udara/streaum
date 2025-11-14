@@ -12,7 +12,7 @@ public class Admin extends BaseEntity{
     private int id;
 
     @Column(name = "username", length = 45, nullable = false)
-    private String name;
+    private String username;
 
     @Column(name = "password", nullable = false)
     private String password;
@@ -23,8 +23,8 @@ public class Admin extends BaseEntity{
 
     public Admin() {}
 
-    public Admin(String name, String password, AdminType type) {
-        this.name = name;
+    public Admin(String username, String password, AdminType type) {
+        this.username = username;
         this.password = password;
         this.type = type;
     }
@@ -33,16 +33,16 @@ public class Admin extends BaseEntity{
         return id;
     }
 
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
     public void setId(int id) {
         this.id = id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
     }
 
     public String getPassword() {
