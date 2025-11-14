@@ -3,15 +3,19 @@ import api from '@/axios'
 import FolderOptionBar from '@/components/bars/FolderOptionBar'
 import FileCard from '@/components/cards/FileCard'
 import { Path } from '@/types'
+import { useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 const FilesPage = () => {
     const [paths, setPaths] = useState<Path | null>(null);
 
-    const fetchFiles = (path? :string) => {
+    const searchParams = useSearchParams();
+    const paramPath = searchParams.get('path');
+
+    const fetchFiles = (path?: string) => {
         api.get("/file-path", {
-            params : {
-                path
+            params: {
+                path: path
             }
         }).then(res => {
             console.log(res);
@@ -23,8 +27,12 @@ const FilesPage = () => {
     }
 
     useEffect(() => {
-        fetchFiles();
-    }, []);
+        if (paramPath) {
+            fetchFiles(paramPath);
+        } else {
+            fetchFiles();
+        }
+    }, [paramPath]);
 
     return (
         <div className='flex flex-col items-center gap-3 min-h-screen overflow-y-scroll '>
@@ -33,7 +41,7 @@ const FilesPage = () => {
             <FolderOptionBar />
             <div className='grid grid-cols-5 gap-3 container h-min'>
                 {paths?.children.map((item, index) => (
-                    <FileCard key={index} item={item} fetchChildrens={fetchFiles} />
+                    <FileCard key={index} item={item} />
                 ))}
             </div>
         </div>
