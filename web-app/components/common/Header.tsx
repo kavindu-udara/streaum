@@ -9,7 +9,7 @@ const Header = () => {
     ]
 
     return (
-        <header className='flex justify-center items-center bg-slate-600 opacity-90 py-4 fixed left-0 right-0 z-100'>
+        <header className='flex justify-center items-center bg-slate-600 opacity-90 py-4 left-0 right-0'>
             <ul className='flex flex-row gap-3'>
                 {navList.map((link, i) => (
                     <li key={i}><Link href={link.link}>{link.name}</Link></li>

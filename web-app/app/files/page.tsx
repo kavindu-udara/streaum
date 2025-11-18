@@ -2,9 +2,10 @@
 import api from '@/axios'
 import FolderOptionBar from '@/components/bars/FolderOptionBar'
 import FileCard from '@/components/cards/FileCard'
+import FileOptionsDropdownMenu from '@/components/menus/FileOptionsDropdownMenu'
 import { Path } from '@/types'
 import { useSearchParams } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 const FilesPage = () => {
     const [paths, setPaths] = useState<Path | null>(null);
@@ -24,6 +25,10 @@ const FilesPage = () => {
         }).catch(err => {
             console.log(err);
         });
+    }
+
+    const toggleFileOptionDropdownMenu = () => {
+
     }
 
     useEffect(() => {

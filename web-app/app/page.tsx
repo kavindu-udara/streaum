@@ -107,7 +107,7 @@ export default function Home() {
   }, [id]);
 
   return (
-    <div className={`flex flex-row justify-center font-sans  bg-cover bg-no-repeat relative ${currentSong && 'max-h-screen overflow-y-hidden'} `}>
+    <div className={`flex flex-row justify-center font-sans bg-cover bg-no-repeat relative ${currentSong && 'max-h-screen overflow-y-hidden'} `}>
       <div className="grid grid-cols-3 gap-5 py-5 container">
         {songs.map(song => (
           <SongCard song={song} key={song.id} />
