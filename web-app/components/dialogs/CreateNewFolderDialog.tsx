@@ -10,14 +10,52 @@ import {
 import { Label } from '@radix-ui/react-label';
 import { Input } from '../ui/input';
 import { Button } from '../ui/button';
+import toast from 'react-hot-toast';
+import api from '@/axios';
+import { Path, PathActions } from '@/types';
+import { useRouter } from 'next/navigation';
 
-const CreateNewFolderDialog = ({ triggerRef }: { triggerRef: RefObject<HTMLButtonElement | null> }) => {
+const CreateNewFolderDialog = ({ triggerRef, path }: { triggerRef: RefObject<HTMLButtonElement | null>, path: Path }) => {
 
+    const router = useRouter();
     const [name, setName] = useState<string>("");
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleCancelButton = () => {
         setName("");
         triggerRef.current?.click();
+    }
+
+    const handleCreateButton = () => {
+        if (!name) {
+            toast.error("Please enter a folder name");
+            return;
+        }
+        setIsLoading(true);
+        console.log({
+            action: PathActions.NEW_FOLDER,
+            path: path.path,
+            name
+        })
+        api.post("/path-action", {
+            action: "NEW_FOLDER",
+            path: path.path,
+            name
+        }).then(res => {
+            console.log(res)
+            if(res.data.success){
+                toast.success("Folder Created Successfull");
+                handleCancelButton();
+                router.refresh();
+            }
+            toast.error(res.data.message);
+        }).catch(err => {
+            console.error(err);
+            toast.error(err.response.data.message || err.message || "Folder Create Failed");
+        }).finally(() => {
+            setIsLoading(false);
+        }
+        );
     }
 
     return (
@@ -31,10 +69,12 @@ const CreateNewFolderDialog = ({ triggerRef }: { triggerRef: RefObject<HTMLButto
                 </DialogHeader>
                 <div className='grid gap-3'>
                     <Label>Folder Name</Label>
-                    <Input type='text' placeholder='folder name' />
-                    <div className='grid grid-cols-2 gap-5'>
-                        <Button>Create</Button>
-                        <Button variant={'secondary'} onClick={handleCancelButton}>Cancel</Button>
+                    <Input type='text' placeholder='folder name' onChange={(e) => setName(e.target.value)} />
+                    <div className='grid grid-cols-2 gap-5 mt-5'>
+                        <Button onClick={handleCreateButton} disabled={isLoading}>
+                            {isLoading ? "Loading..." : "Create"}
+                        </Button>
+                        <Button variant={'secondary'} onClick={handleCancelButton} disabled={isLoading}>Cancel</Button>
                     </div>
                 </div>
             </DialogContent>

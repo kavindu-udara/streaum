@@ -6,8 +6,9 @@ import { MdDelete } from "react-icons/md";
 import { IoIosArrowBack, IoIosArrowForward } from "react-icons/io";
 import { IoCaretForwardSharp } from "react-icons/io5";
 import CreateNewFolderDialog from '../dialogs/CreateNewFolderDialog';
+import { Path } from '@/types';
 
-const FolderOptionBar = () => {
+const FolderOptionBar = ({path} : {path : Path}) => {
 
     const createNewFolderDialogTriggerRef = useRef<HTMLButtonElement>(null);
 
@@ -24,7 +25,7 @@ const FolderOptionBar = () => {
                 <MdCreateNewFolder size={25} className='cursor-pointer' onClick={() => createNewFolderDialogTriggerRef.current?.click()} />
                 <MdDelete size={25} className='cursor-pointer' />
             </div>
-            <CreateNewFolderDialog triggerRef={createNewFolderDialogTriggerRef} />
+            <CreateNewFolderDialog triggerRef={createNewFolderDialogTriggerRef} path={path} />
         </div>
     )
 }

@@ -43,7 +43,7 @@ const FilesPage = () => {
         <div className='flex flex-col items-center gap-3 min-h-screen overflow-y-scroll '>
             <div className='container font-semibold'>
                 {paths?.name}</div>
-            <FolderOptionBar />
+            <FolderOptionBar path={paths} />
             <div className='grid grid-cols-5 gap-3 container h-min'>
                 {paths?.children.map((item, index) => (
                     <FileCard key={index} item={item} />
