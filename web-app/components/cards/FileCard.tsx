@@ -20,7 +20,7 @@ const FileCard = ({ item }: { item: Path }) => {
                 {item.name}
             </span>
 
-            <FileOptionsDropdownMenu />
+            <FileOptionsDropdownMenu item={item} />
         </div>
     )
 }

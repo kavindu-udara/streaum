@@ -9,8 +9,9 @@ import {
 } from "@/components/ui/dropdown-menu"
 
 import { BsThreeDotsVertical } from "react-icons/bs";
+import { Path } from '@/types';
 
-const FileOptionsDropdownMenu = () => {
+const FileOptionsDropdownMenu = ({ item }: { item: Path }) => {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
