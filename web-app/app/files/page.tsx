@@ -2,7 +2,6 @@
 import api from '@/axios'
 import FolderOptionBar from '@/components/bars/FolderOptionBar'
 import FileCard from '@/components/cards/FileCard'
-import FileOptionsDropdownMenu from '@/components/menus/FileOptionsDropdownMenu'
 import { Path } from '@/types'
 import { useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'

@@ -10,8 +10,30 @@ import {
 
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { Path } from '@/types';
+import api from '@/axios';
+import toast from 'react-hot-toast';
 
 const FileOptionsDropdownMenu = ({ item }: { item: Path }) => {
+
+  const handleDelete = () => {
+    api.post("/path-action", {
+      action: item.children.length > 0 ? "FORCE_DELETE" : "DELETE",
+      path: item.path,
+      name : item.name
+    }).then(res => {
+      console.log(res);
+      if(res.data.success){
+        toast.success("Delete Successful");
+        window.location.reload();
+        return;
+      }
+      toast.error(res.data.message);
+    }).catch(err => {
+      console.log(err);
+      toast.error(err.response.data.message || err.message || "Delete Failed");
+    })
+  }
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
@@ -22,7 +44,7 @@ const FileOptionsDropdownMenu = ({ item }: { item: Path }) => {
         <DropdownMenuItem>Rename</DropdownMenuItem>
         <DropdownMenuItem>Move</DropdownMenuItem>
         <DropdownMenuItem>Copy</DropdownMenuItem>
-        <DropdownMenuItem>Delete</DropdownMenuItem>
+        <DropdownMenuItem onClick={handleDelete}>Delete</DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   )

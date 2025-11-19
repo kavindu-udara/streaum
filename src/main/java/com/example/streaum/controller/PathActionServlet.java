@@ -19,12 +19,16 @@ public class PathActionServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         JsonObject resObj = new JsonObject();
         Gson gson = new Gson();
+        JsonObject reqObj = gson.fromJson(request.getReader(), JsonObject.class);
 
         boolean isSuccess = false;
         int resStatus = HttpServletResponse.SC_BAD_REQUEST;
 
-        String action = request.getParameter("action");
-        String path = request.getParameter("path");
+        String action = reqObj.get("action").getAsString();
+        String path = reqObj.get("path").getAsString();
+
+        System.out.println(action);
+        System.out.println(path);
 
         try {
 
@@ -41,19 +45,48 @@ public class PathActionServlet extends HttpServlet {
                 return;
             }
 
+            FileOperations fileOperations = new FileOperations();
+
             if (action.equals(PathAction.NEW_FOLDER.name())) {
-                String name = request.getParameter("name");
+                String name = reqObj.get("name").getAsString();
                 if (name == null || name.isEmpty()) {
                     resObj.addProperty("message", "New file or folder name is required.");
                     return;
                 }
-                FileOperations fileOperations = new FileOperations();
                 String operationResult = fileOperations.createFolder(path, name);
                 JsonObject operationResultJson = gson.fromJson(operationResult, JsonObject.class);
 
                 resObj.addProperty("message", operationResultJson.get("message").getAsString());
                 isSuccess = operationResultJson.get("success").getAsBoolean();
-                if( isSuccess){
+                if (isSuccess) {
+                    resStatus = HttpServletResponse.SC_OK;
+                }
+            } else if (action.equals((PathAction.DELETE.name()))) {
+                String name = reqObj.get("name").getAsString();
+                if (name == null || name.isEmpty()) {
+                    resObj.addProperty("message", "File or folder name is required.");
+                    return;
+                }
+                String operationResult = fileOperations.deletePath(path);
+                JsonObject operationResultJson = gson.fromJson(operationResult, JsonObject.class);
+
+                resObj.addProperty("message", operationResultJson.get("message").getAsString());
+                isSuccess = operationResultJson.get("success").getAsBoolean();
+                if (isSuccess) {
+                    resStatus = HttpServletResponse.SC_OK;
+                }
+            } else if (action.equals((PathAction.FORCE_DELETE.name()))) {
+                String name = reqObj.get("name").getAsString();
+                if (name == null || name.isEmpty()) {
+                    resObj.addProperty("message", "File or folder name is required.");
+                    return;
+                }
+                String operationResult = fileOperations.deletePathRecursive(path);
+                JsonObject operationResultJson = gson.fromJson(operationResult, JsonObject.class);
+
+                resObj.addProperty("message", operationResultJson.get("message").getAsString());
+                isSuccess = operationResultJson.get("success").getAsBoolean();
+                if (isSuccess) {
                     resStatus = HttpServletResponse.SC_OK;
                 }
             }

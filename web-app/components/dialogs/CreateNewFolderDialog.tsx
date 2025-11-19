@@ -32,21 +32,16 @@ const CreateNewFolderDialog = ({ triggerRef, path }: { triggerRef: RefObject<HTM
             return;
         }
         setIsLoading(true);
-        console.log({
-            action: PathActions.NEW_FOLDER,
-            path: path.path,
-            name
-        })
         api.post("/path-action", {
             action: "NEW_FOLDER",
             path: path.path,
             name
         }).then(res => {
             console.log(res)
-            if(res.data.success){
+            if (res.data.success) {
                 toast.success("Folder Created Successfull");
-                handleCancelButton();
-                router.refresh();
+                window.location.reload();
+                return;
             }
             toast.error(res.data.message);
         }).catch(err => {

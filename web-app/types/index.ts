@@ -25,6 +25,7 @@ export type Path = {
 export enum PathActions {
   NEW_FOLDER,
   DELETE,
+  FORCE_DELETE,
   RENAME,
   MOVE,
   COPY,

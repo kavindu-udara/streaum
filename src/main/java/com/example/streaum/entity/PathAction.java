@@ -1,5 +1,5 @@
 package com.example.streaum.entity;
 
 public enum PathAction {
-    NEW_FOLDER, DELETE, RENAME, MOVE, COPY
+    NEW_FOLDER, DELETE, FORCE_DELETE, RENAME, MOVE, COPY
 }
